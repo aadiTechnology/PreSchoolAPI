@@ -891,8 +891,6 @@ namespace PreSchoolAPI.Models
         public string month { get; set; }
         public string year { get; set; }
 
-
-
         public string AddPhotoAlbum()
         {
             string AddPhotoAlbumReturn = "";
