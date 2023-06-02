@@ -207,6 +207,14 @@ namespace TestCORS.Controllers
             return classModel.GetClassNameList();
         }
 
+        [HttpPost]
+        [Route("GetClassForTeacher")]
+        public List<ClassModel> GetClassForTeacher([FromBody] ClassModel classModel)
+        {
+            return classModel.GetClassForTeacher();
+
+        }
+
 
     }
 
