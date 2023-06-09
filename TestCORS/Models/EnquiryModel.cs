@@ -553,7 +553,7 @@ namespace PreSchoolAPI.Models
         public string AssignDate { get; set; }
         public string Attachment { get; set; }
 
-        public string Camera { get; set; }
+        public int UserId { get; set; }
 
 
         public string AddHomeworkDetails()
@@ -570,16 +570,19 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_AddHomeworkDetails";
 
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar)).Value = Class;
+
+                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
+                        .Value = Class;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectName", SqlDbType.VarChar))
                       .Value = SubjectName;
-                    oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar)).Value = SubjectDescription;
+                    oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar))
+                        .Value = SubjectDescription;
                     oCommand.Parameters.Add(new SqlParameter("@AssignDate", SqlDbType.VarChar))
                        .Value = AssignDate;
                     oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
                        .Value = Attachment;
-                    oCommand.Parameters.Add(new SqlParameter("@Camera", SqlDbType.VarChar))
-                       .Value = Camera;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                       .Value = UserId;
 
                     try
                     {
@@ -625,8 +628,7 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString(),
-                                    Camera = dr["Camera"].ToString()
+                                    Attachment = dr["Attachment"].ToString()
                                 });
                         }
                     }
@@ -664,8 +666,7 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString(),
-                                    Camera = dr["Camera"].ToString()
+                                    Attachment = dr["Attachment"].ToString()
                                 });
                         }
                     }
@@ -706,8 +707,7 @@ namespace PreSchoolAPI.Models
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
                                 AssignDate = dr["AssignDate"].ToString(),
-                                Attachment = dr["Attachment"].ToString(),
-                                Camera = dr["Camera"].ToString()
+                                Attachment = dr["Attachment"].ToString()
                             };
                         }
                     }
@@ -810,7 +810,7 @@ namespace PreSchoolAPI.Models
         public int ClassId { get; set; }
         public string ClassName { get; set; }
         public string InsertBy { get; set; }
-        public int TeacherId { get; set; }
+        public string TeacherId { get; set; }
 
 
         public string AddClassDetails()
@@ -879,50 +879,7 @@ namespace PreSchoolAPI.Models
             return ClassModels;
         }
 
-        public List<ClassModel> GetClassForTeacher()
-        {
-
-            List<ClassModel> ClassModels = new List<ClassModel>();
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionString))
-            {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetClassForTeacher";
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherId", SqlDbType.Int))
-                          .Value = TeacherId;
-
-                    // oCommand.Parameters.Add(new SqlParameter("@ClassName", SqlDbType.VarChar))
-                    // .Value = ClassName;
-
-                    try
-                    {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            ClassModels.Add(
-                            new ClassModel
-                            {
-                                //ClassId= Convert.ToInt32(dr["ClassId"].ToString()),
-                                ClassName = dr["ClassName"].ToString(),
-
-                            }
-                            );
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-                        // Action after the exception is caught  
-                    }
-                }
-            }
-            return ClassModels;
-        }
     }
-
 
     public class PhotoAlbumModel
     {
