@@ -553,7 +553,7 @@ namespace PreSchoolAPI.Models
         public string AssignDate { get; set; }
         public string Attachment { get; set; }
 
-        public string Camera { get; set; }
+        public int UserId { get; set; }
 
 
         public string AddHomeworkDetails()
@@ -570,16 +570,19 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_AddHomeworkDetails";
 
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar)).Value = Class;
+
+                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
+                        .Value = Class;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectName", SqlDbType.VarChar))
                       .Value = SubjectName;
-                    oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar)).Value = SubjectDescription;
+                    oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar))
+                        .Value = SubjectDescription;
                     oCommand.Parameters.Add(new SqlParameter("@AssignDate", SqlDbType.VarChar))
                        .Value = AssignDate;
                     oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
                        .Value = Attachment;
-                    oCommand.Parameters.Add(new SqlParameter("@Camera", SqlDbType.VarChar))
-                       .Value = Camera;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                       .Value = UserId;
 
                     try
                     {
@@ -625,8 +628,7 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString(),
-                                    Camera = dr["Camera"].ToString()
+                                    Attachment = dr["Attachment"].ToString()
                                 });
                         }
                     }
@@ -664,8 +666,7 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString(),
-                                    Camera = dr["Camera"].ToString()
+                                    Attachment = dr["Attachment"].ToString()
                                 });
                         }
                     }
@@ -706,8 +707,7 @@ namespace PreSchoolAPI.Models
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
                                 AssignDate = dr["AssignDate"].ToString(),
-                                Attachment = dr["Attachment"].ToString(),
-                                Camera = dr["Camera"].ToString()
+                                Attachment = dr["Attachment"].ToString()
                             };
                         }
                     }
