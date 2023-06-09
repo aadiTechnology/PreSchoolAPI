@@ -734,7 +734,7 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandText = "USP_HomeworkDetailsListForEdit";
 
                     SqlParameter param;
-                    param = oCommand.Parameters.Add("@HomeworkDetailsId", SqlDbType.Int);
+                    param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
                     param.Value = Id;
 
                     try
@@ -744,6 +744,7 @@ namespace PreSchoolAPI.Models
                         {
                             HomeworkDetails = new HomeworkDetailsModel
                             {
+                                
                                 Class = dr["Class"].ToString(),
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
