@@ -600,6 +600,45 @@ namespace PreSchoolAPI.Models
             return addhomeworkdetailsReturn;
         }
 
+        public string SubmitHomework()
+        {
+            string DeleteHomeworkReturn = "";
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    oConnection.Open();
+                    using (SqlCommand oCommand = oConnection.CreateCommand())
+                    {
+                        oCommand.CommandType = CommandType.StoredProcedure;
+                        oCommand.CommandText = "USP_SubmitHomework";
+
+                        SqlParameter param;
+                        param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                        param.Value = Id;
+                        int result = oCommand.ExecuteNonQuery();
+                        if (result >= 1) 
+                        {
+                            DeleteHomeworkReturn = "Success";
+                        }
+                        else
+                        {
+                            DeleteHomeworkReturn = "Failure";
+                        }
+                        
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    
+                    // Action after the exception is caught  
+                }
+            }
+            return DeleteHomeworkReturn;
+        }
+
 
         public List<HomeworkDetailsModel> GetHomeworkDetails()
 

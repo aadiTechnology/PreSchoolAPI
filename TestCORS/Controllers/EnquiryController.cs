@@ -99,6 +99,14 @@ namespace TestCORS.Controllers
         }
 
         [HttpPost]
+        [Route("SubmitHomework")]
+        public string SubmitHomework([FromBody] HomeworkDetailsModel homeworkDetails)
+        {
+            return homeworkDetails.SubmitHomework();
+        }
+
+
+        [HttpPost]
         [Route("GetHomeworkDetails")]
         public List<HomeworkDetailsModel> GetHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
         {
