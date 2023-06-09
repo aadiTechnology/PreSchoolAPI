@@ -744,7 +744,7 @@ namespace PreSchoolAPI.Models
                         {
                             HomeworkDetails = new HomeworkDetailsModel
                             {
-                                
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
                                 Class = dr["Class"].ToString(),
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
