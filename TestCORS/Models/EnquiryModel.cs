@@ -553,7 +553,7 @@ namespace PreSchoolAPI.Models
         public string AssignDate { get; set; }
         public string Attachment { get; set; }
 
-       public bool Submit { get; set; }
+        public string Camera { get; set; }
 
 
         public string AddHomeworkDetails()
@@ -569,17 +569,17 @@ namespace PreSchoolAPI.Models
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_AddHomeworkDetails";
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
-                        .Value = Class;
+
+                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar)).Value = Class;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectName", SqlDbType.VarChar))
                       .Value = SubjectName;
-                    oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar))
-                        .Value = SubjectDescription;
+                    oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar)).Value = SubjectDescription;
                     oCommand.Parameters.Add(new SqlParameter("@AssignDate", SqlDbType.VarChar))
                        .Value = AssignDate;
                     oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
                        .Value = Attachment;
-                    
+                    oCommand.Parameters.Add(new SqlParameter("@Camera", SqlDbType.VarChar))
+                       .Value = Camera;
 
                     try
                     {
@@ -597,44 +597,6 @@ namespace PreSchoolAPI.Models
             return addhomeworkdetailsReturn;
         }
 
-        public string SubmitHomework()
-        {
-            string DeleteHomeworkReturn = "";
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    oConnection.Open();
-                    using (SqlCommand oCommand = oConnection.CreateCommand())
-                    {
-                        oCommand.CommandType = CommandType.StoredProcedure;
-                        oCommand.CommandText = "USP_SubmitHomework";
-
-                        SqlParameter param;
-                        param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
-                        param.Value = Id;
-                        param = oCommand.Parameters.Add("@SubmitHomeworK", SqlDbType.Int);
-                        param.Value = Submit;
-
-                        int result = oCommand.ExecuteNonQuery();
-                        if (result <= 0) 
-                        {
-                            DeleteHomeworkReturn = "Failure"; 
-                        }
-                        else
-                        {
-                          DeleteHomeworkReturn = "Success";
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    oConnection.Close();
-                }
-            }
-            return DeleteHomeworkReturn;
-        }
 
         public List<HomeworkDetailsModel> GetHomeworkDetails()
 
@@ -663,7 +625,8 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString()
+                                    Attachment = dr["Attachment"].ToString(),
+                                    Camera = dr["Camera"].ToString()
                                 });
                         }
                     }
@@ -701,7 +664,8 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString()
+                                    Attachment = dr["Attachment"].ToString(),
+                                    Camera = dr["Camera"].ToString()
                                 });
                         }
                     }
@@ -742,7 +706,8 @@ namespace PreSchoolAPI.Models
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
                                 AssignDate = dr["AssignDate"].ToString(),
-                                Attachment = dr["Attachment"].ToString()
+                                Attachment = dr["Attachment"].ToString(),
+                                Camera = dr["Camera"].ToString()
                             };
                         }
                     }
@@ -753,53 +718,6 @@ namespace PreSchoolAPI.Models
                 }
             }
             return HomeworkDetails;
-        }
-
-        public string UpdateHomeworkAfterEdit()
-
-        {
-
-            string addhomeworkdetailsReturn = "";
-            string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connetionString))
-            {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_UpdateHomeworkAfterEdit";
-
-                    SqlParameter param;
-                    param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
-                    param.Value = Id;
-                    param = oCommand.Parameters.Add("@Class", SqlDbType.VarChar);
-                    param.Value = Class;
-                        param = oCommand.Parameters.Add("@SubjectName", SqlDbType.VarChar);
-                    param.Value = SubjectName;
-                    param = oCommand.Parameters.Add("@SubjectDescription", SqlDbType.VarChar);
-                    param.Value = SubjectDescription;
-                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
-                    param.Value = AssignDate;
-                    param = oCommand.Parameters.Add("@Attachment", SqlDbType.VarChar);
-                    param.Value = Attachment;
-                    try
-                    {
-                       int result= oCommand.ExecuteNonQuery();
-                        if (result >= 1) { addhomeworkdetailsReturn = "Success"; }
-                        else
-                        {
-                            addhomeworkdetailsReturn = "Failure";
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-                       
-                    }
-
-                }
-            }
-            return addhomeworkdetailsReturn;
         }
         public string DeleteHomeworkDetails()
         {
@@ -831,8 +749,6 @@ namespace PreSchoolAPI.Models
             }
             return DeleteHomeworkReturn;
         }
-
-       
 
     }
 
@@ -875,46 +791,6 @@ namespace PreSchoolAPI.Models
                                     AssignDate = dr["AssignDate"].ToString(),
                                     Attachment = dr["Attachment"].ToString(),
                                 });
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-
-                    }
-                }
-            }
-            return viewhomeworkModel;
-        }
-        public HomeworkModel GetDateForLegend()
-
-        {
-            HomeworkModel viewhomeworkModel = new HomeworkModel();
-            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionstring))
-            {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetDateForLegend";
-                    SqlParameter param;
-                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
-                    param.Value = AssignDate;
-                    try
-                    {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
-                        {
-
-                            viewhomeworkModel = new HomeworkModel
-                            {
-
-                                AssignDate = dr["AssignDate"].ToString(),
-
-
-
-                            };
                         }
                     }
                     catch (Exception e)
@@ -1336,50 +1212,6 @@ namespace PreSchoolAPI.Models
             }
             return userModel;
         }
-    }
-
-
-    public class SubjectModel
-    {
-        public string SubjectName { get; set; }
-        public List<SubjectModel> GetSubjectListDropDown()
-        {
-
-            List<SubjectModel> subjectModels = new List<SubjectModel>();
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionString))
-            {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetSubjectNameDropDown";
-
-                    try
-                    {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            subjectModels.Add(
-                            new SubjectModel
-                            {
-
-                                SubjectName = dr["SubjectName"].ToString()
-
-                            }
-                            );
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-                        // Action after the exception is caught  
-                    }
-                }
-            }
-            return subjectModels;
-        }
-
     }
 
 

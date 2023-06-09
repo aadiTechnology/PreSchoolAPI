@@ -99,14 +99,6 @@ namespace TestCORS.Controllers
         }
 
         [HttpPost]
-        [Route("SubmitHomework")]
-        public string SubmitHomework([FromBody] HomeworkDetailsModel homeworkDetails)
-        {
-            return homeworkDetails.SubmitHomework();
-        }
-
-
-        [HttpPost]
         [Route("GetHomeworkDetails")]
         public List<HomeworkDetailsModel> GetHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
         {
@@ -129,15 +121,6 @@ namespace TestCORS.Controllers
             return homeworkDetails.HomeworkDetailsListForEdit();
         }
 
-
-        [HttpPost]
-        [Route("UpdateHomeworkAfterEdit")]
-        public string UpdateHomeworkAfterEdit([FromBody] HomeworkDetailsModel homeworkDetails)
-        {
-            return homeworkDetails.UpdateHomeworkAfterEdit();
-        }
-
-
         [HttpPost]
         [Route("DeleteHomeworkDetails")]
         public string DeleteHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
@@ -151,13 +134,6 @@ namespace TestCORS.Controllers
         {
 
             return homeworkModel.GetViewHomeWorkList();
-        }
-
-        [HttpPost]
-            [Route("GetDateForLegend")]
-        public HomeworkModel GetDateForLegend([FromBody] HomeworkModel homeworkModel)
-        {
-            return homeworkModel.GetDateForLegend();
         }
 
 
@@ -231,13 +207,7 @@ namespace TestCORS.Controllers
             return classModel.GetClassNameList();
         }
 
-        [HttpPost]
-        [Route("GetSubjectListDropDown")]
-        public List<SubjectModel> GetSubjectListDropDown()
-        {
-            SubjectModel subjectModel = new SubjectModel();
-            return subjectModel.GetSubjectListDropDown();
-        }
+
     }
 
 }
