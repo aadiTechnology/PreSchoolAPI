@@ -130,19 +130,28 @@ namespace TestCORS.Controllers
         }
 
         [HttpPost]
+        [Route("GetDateForLegend")]
+        public HomeworkDetailsModel GetDateForLegend([FromBody] HomeworkDetailsModel homeworkDetails)
+        {
+            return homeworkDetails.GetDateForLegend();
+        }
+
+        [HttpPost]
+        [Route("GetViewHomeWorkList")]
+        public List<HomeworkDetailsModel> GetViewHomeWorkList([FromBody] HomeworkDetailsModel homeworkDetails)
+        {
+
+            return homeworkDetails.GetViewHomeWorkList();
+        }
+
+        [HttpPost]
         [Route("DeleteHomeworkDetails")]
         public string DeleteHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
         {
             return homeworkDetails.DeleteHomeworkDetails();
         }
 
-        [HttpPost]
-        [Route("GetViewHomeWorkList")]
-        public List<HomeworkModel> GetViewHomeWorkList([FromBody] HomeworkModel homeworkModel)
-        {
-
-            return homeworkModel.GetViewHomeWorkList();
-        }
+       
 
 
         [HttpPost]

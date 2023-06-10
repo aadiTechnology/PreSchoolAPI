@@ -720,6 +720,80 @@ namespace PreSchoolAPI.Models
             }
             return homeworkdetailsModel;
         }
+        public List<HomeworkDetailsModel> GetViewHomeWorkList()
+
+        {
+            List<HomeworkDetailsModel> viewhomeworkModel = new List<HomeworkDetailsModel>();
+            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionstring))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetViewHomeWork";
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
+                    param.Value = AssignDate;
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            viewhomeworkModel.Add(
+                                new HomeworkDetailsModel
+                                {
+                                    SubjectDescription = dr["SubjectDescription"].ToString(),
+                                    AssignDate = dr["AssignDate"].ToString(),
+                                    Attachment = dr["Attachment"].ToString(),
+                                });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+
+                    }
+                }
+            }
+            return viewhomeworkModel;
+        }
+        public HomeworkDetailsModel GetDateForLegend()
+
+        {
+            HomeworkDetailsModel viewhomeworkModel = new HomeworkDetailsModel();
+            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionstring))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetDateForLegend";
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
+                    param.Value = AssignDate;
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+
+                            viewhomeworkModel = new HomeworkDetailsModel
+                            {
+                                AssignDate = dr["AssignDate"].ToString()
+                            };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+
+                    }
+                }
+            }
+            return viewhomeworkModel;
+        }
         public HomeworkDetailsModel HomeworkDetailsListForEdit()
         {
             HomeworkDetailsModel HomeworkDetails = new HomeworkDetailsModel();
@@ -796,14 +870,13 @@ namespace PreSchoolAPI.Models
 
     public class HomeworkModel
     {
-        public int ViewHomeworkId { get; set; }
+        
 
-        public string StudentDescription { get; set; }
+        public string SubjectDescription { get; set; }
         public string AssignDate { get; set; }
 
         public string Attachment { get; set; }
-        public int HomeworkDetailsId { get; set; }
-        public string SubjectName { get; set; }
+       
 
 
         public List<HomeworkModel> GetViewHomeWorkList()
@@ -829,10 +902,46 @@ namespace PreSchoolAPI.Models
                             viewhomeworkModel.Add(
                                 new HomeworkModel
                                 {
-                                    StudentDescription = dr["SubjectDescription"].ToString(),
+                                    SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
                                     Attachment = dr["Attachment"].ToString(),
                                 });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+
+                    }
+                }
+            }
+            return viewhomeworkModel;
+        }
+        public HomeworkModel GetDateForLegend()
+
+        {
+            HomeworkModel viewhomeworkModel = new HomeworkModel();
+            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionstring))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetDateForLegend";
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
+                    param.Value = AssignDate;
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+
+                            viewhomeworkModel = new HomeworkModel
+                            {
+                                AssignDate = dr["AssignDate"].ToString()
+                            };
                         }
                     }
                     catch (Exception e)
