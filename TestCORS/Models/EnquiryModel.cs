@@ -781,7 +781,9 @@ namespace PreSchoolAPI.Models
 
                             viewhomeworkModel = new HomeworkDetailsModel
                             {
-                                AssignDate = dr["AssignDate"].ToString()
+                                AssignDate = dr["AssignDate"].ToString(),
+                                SubjectName = dr["SubjectName"].ToString()
+                                
                             };
                         }
                     }
