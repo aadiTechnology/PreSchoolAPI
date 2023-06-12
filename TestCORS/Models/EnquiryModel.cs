@@ -1044,6 +1044,7 @@ namespace PreSchoolAPI.Models
         public string AlbumDate { get; set; }
         public string month { get; set; }
         public string year { get; set; }
+        public int CreatedBy { get; set; }
 
         public string AddPhotoAlbum()
         {
@@ -1065,6 +1066,8 @@ namespace PreSchoolAPI.Models
                    .Value = Class;
                     oCommand.Parameters.Add(new SqlParameter("@AlbumDate", SqlDbType.VarChar))
                    .Value = AlbumDate;
+                    oCommand.Parameters.Add(new SqlParameter("@CreatedBy", SqlDbType.Int))
+                        .Value = CreatedBy;
 
                     try
                     {
