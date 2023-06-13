@@ -169,6 +169,15 @@ namespace TestCORS.Controllers
         }
 
         [HttpPost]
+        [Route("GetAllAlbumNameList")]
+        public List<PhotoAlbumModel> GetAllAlbumNameList()
+        {
+            PhotoAlbumModel photoModel = new PhotoAlbumModel();
+            return photoModel.GetAllAlbumNameList();
+        }
+
+
+        [HttpPost]
         [Route("GetYearDropDownForAlbumList")]
         public List<PhotoAlbumModel> GetYearDropDownForAlbumList()
         {

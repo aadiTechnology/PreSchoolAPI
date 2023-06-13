@@ -549,15 +549,9 @@ namespace PreSchoolAPI.Models
         public string Class { get; set; }
         public string SubjectName { get; set; }
         public string SubjectDescription { get; set; }
-
         public string AssignDate { get; set; }
         public string Attachment { get; set; }
-
         public int UserId { get; set; }
-
-
-
-
         public string AddHomeworkDetails()
 
         {
@@ -601,7 +595,6 @@ namespace PreSchoolAPI.Models
             }
             return addhomeworkdetailsReturn;
         }
-
         public string SubmitHomework()
         {
             string DeleteHomeworkReturn = "";
@@ -640,8 +633,6 @@ namespace PreSchoolAPI.Models
             }
             return DeleteHomeworkReturn;
         }
-
-
         public List<HomeworkDetailsModel> GetHomeworkDetails()
 
         {
@@ -870,94 +861,6 @@ namespace PreSchoolAPI.Models
         }
 
     }
-
-    public class HomeworkModel
-    {
-        
-
-        public string SubjectDescription { get; set; }
-        public string AssignDate { get; set; }
-
-        public string Attachment { get; set; }
-       
-
-
-        public List<HomeworkModel> GetViewHomeWorkList()
-
-        {
-            List<HomeworkModel> viewhomeworkModel = new List<HomeworkModel>();
-            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionstring))
-            {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetViewHomeWork";
-                    SqlParameter param;
-                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
-                    param.Value = AssignDate;
-                    try
-                    {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            viewhomeworkModel.Add(
-                                new HomeworkModel
-                                {
-                                    SubjectDescription = dr["SubjectDescription"].ToString(),
-                                    AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString(),
-                                });
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-
-                    }
-                }
-            }
-            return viewhomeworkModel;
-        }
-        public HomeworkModel GetDateForLegend()
-
-        {
-            HomeworkModel viewhomeworkModel = new HomeworkModel();
-            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionstring))
-            {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
-                {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetDateForLegend";
-                    SqlParameter param;
-                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
-                    param.Value = AssignDate;
-                    try
-                    {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
-                        {
-
-                            viewhomeworkModel = new HomeworkModel
-                            {
-                                AssignDate = dr["AssignDate"].ToString()
-                            };
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-
-                    }
-                }
-            }
-            return viewhomeworkModel;
-        }
-    }
-
     public class ClassModel
 
     {
@@ -965,8 +868,6 @@ namespace PreSchoolAPI.Models
         public string ClassName { get; set; }
         public string InsertBy { get; set; }
         public string TeacherId { get; set; }
-
-
         public string AddClassDetails()
         {
             string AddClassDetails1Return = "";
@@ -1032,7 +933,6 @@ namespace PreSchoolAPI.Models
             }
             return ClassModels;
         }
-
     }
 
     public class PhotoAlbumModel
@@ -1086,6 +986,47 @@ namespace PreSchoolAPI.Models
             return AddPhotoAlbumReturn;
 
         }
+
+        public List<PhotoAlbumModel> GetAllAlbumNameList()
+        {
+
+            List<PhotoAlbumModel> photoModels = new List<PhotoAlbumModel>();
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetAllAlbumNameList";
+
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            photoModels.Add(
+                            new PhotoAlbumModel
+                            {
+                                AlbumId = Convert.ToInt32(dr["AlbumId"].ToString()),
+                                Title = dr["Title"].ToString(),
+                                Class = dr["Class"].ToString(),
+                                AlbumDate = dr["AlbumDate"].ToString(),
+                                FacebookLink = dr["FacebookLink"].ToString()
+
+                            }
+                            );
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        // Action after the exception is caught  
+                    }
+                }
+            }
+            return photoModels;
+        }
         public List<PhotoAlbumModel> GetYearDropDownForAlbumList()
         {
 
@@ -1123,7 +1064,6 @@ namespace PreSchoolAPI.Models
             }
             return photoModels;
         }
-
         public List<PhotoAlbumModel> GetMonthDropDownForAlbumList()
         {
 
@@ -1161,7 +1101,6 @@ namespace PreSchoolAPI.Models
             }
             return photoModels;
         }
-
         public List<PhotoAlbumModel> GetAlbumNameList()
         {
             List<PhotoAlbumModel> albumModels = new List<PhotoAlbumModel>();
@@ -1199,49 +1138,6 @@ namespace PreSchoolAPI.Models
             }
             return albumModels;
         }
-
-        //public PhotoAlbumModel PhotoAlbumListForEdit(Nullable<int> AlbumId)
-        //{
-        //    PhotoAlbumModel photoAlbumModel = new PhotoAlbumModel();
-
-        //    string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        //    using (SqlConnection oConnection = new SqlConnection(connectionString))
-        //    {
-        //        oConnection.Open();
-        //        using (SqlCommand oCommand = oConnection.CreateCommand())
-        //        {
-        //            oCommand.CommandType = CommandType.StoredProcedure;
-        //            oCommand.CommandText = "USP_PhotoAlbumListForEdit";
-
-        //            SqlParameter param;
-        //            param = oCommand.Parameters.Add("@AlbumId", SqlDbType.Int);
-        //            param.Value = AlbumId;
-
-        //            try
-        //            {
-        //                SqlDataReader dr = oCommand.ExecuteReader();
-        //                while (dr.Read())
-        //                {
-        //                    photoAlbumModel = new PhotoAlbumModel
-        //                    {
-
-        //                        AlbumId = Convert.ToInt32(dr["AlbumId"].ToString()),
-        //                        Title = dr["Title"].ToString(),
-        //                        FacebookLink = dr["FacebookLink"].ToString(),
-        //                        Class = dr["Class"].ToString(),
-        //                        AlbumDate = dr["AlbumDate"].ToString()
-        //                    };
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                oConnection.Close();
-        //            }
-        //        }
-        //    }
-        //    return photoAlbumModel;
-        //}
-
         public string DeletePhotoAlbum()
         {
             string DeletePhotoalbumReturn = "";
@@ -1277,13 +1173,10 @@ namespace PreSchoolAPI.Models
     public class UserLoginModel
     {
         public string EmailId { get; set; }
-
         public string PhoneNo { get; set; }
         public string LoginPassword { get; set; }
         public string UserType { get; set; }
-
         public string BirthDate { get; set; }
-
         public UserLoginModel UserLogin()
         {
 
@@ -1326,8 +1219,6 @@ namespace PreSchoolAPI.Models
 
             return userLogin;
         }
-
-
         public UserLoginModel ForgotPassword()
         {
 
