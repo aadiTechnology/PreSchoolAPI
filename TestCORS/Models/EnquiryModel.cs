@@ -868,6 +868,7 @@ namespace PreSchoolAPI.Models
         public string ClassName { get; set; }
         public string InsertBy { get; set; }
         public string TeacherId { get; set; }
+        public int UserId { get; set; }
         public string AddClassDetails()
         {
             string AddClassDetails1Return = "";
@@ -881,8 +882,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandText = "USP_AddClassDetails";
                     oCommand.Parameters.Add(new SqlParameter("@ClassName", SqlDbType.VarChar))
                     .Value = ClassName;
-                    oCommand.Parameters.Add(new SqlParameter("@InsertBy", SqlDbType.VarChar))
-                  .Value = InsertBy;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.VarChar))
+                  .Value = UserId;
                     try
                     {
                         oCommand.ExecuteNonQuery();
