@@ -941,7 +941,7 @@ namespace PreSchoolAPI.Models
 
     public class PhotoAlbumModel
     {
-        public int AlbumId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string FacebookLink { get; set; }
         public string Class { get; set; }
@@ -1012,7 +1012,7 @@ namespace PreSchoolAPI.Models
                             photoModels.Add(
                             new PhotoAlbumModel
                             {
-                                AlbumId = Convert.ToInt32(dr["AlbumId"].ToString()),
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
                                 Title = dr["Title"].ToString(),
                                 Class = dr["Class"].ToString(),
                                 AlbumDate = dr["AlbumDate"].ToString(),
@@ -1157,8 +1157,8 @@ namespace PreSchoolAPI.Models
                         oCommand.CommandText = "USP_DeletePhotoAlbum";
 
                         SqlParameter param;
-                        param = oCommand.Parameters.Add("@AlbumId", SqlDbType.Int);
-                        param.Value = AlbumId;
+                        param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                        param.Value = Id;
                         oCommand.ExecuteNonQuery();
                         DeletePhotoalbumReturn = "Success";
                     }
@@ -1167,7 +1167,7 @@ namespace PreSchoolAPI.Models
                 {
                     oConnection.Close();
                     DeletePhotoalbumReturn = "Failure";
-                    // Action after the exception is caught  
+                     
                 }
             }
             return DeletePhotoalbumReturn;
