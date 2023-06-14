@@ -363,16 +363,17 @@ namespace PreSchoolAPI.Models
 
     public class TeacherModel
     {
-        public string TeacherName { get; set; }
-        public string TeacherBirthDate { get; set; }
-        public string TeacherQualification { get; set; }
-        public string TeacherAddress { get; set; }
-        public string TeacherNumber { get; set; }
-        public string TeacherEmail { get; set; }
-        public string TeacherExperience { get; set; }
-        public string TeacherJoiningDate { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string BirthDate { get; set; }
+        public string Qualification { get; set; }
+        public string Address { get; set; }
+        public string Phoneno { get; set; }
+        public string Email { get; set; }
+        public string Experience { get; set; }
+        public string JoiningDate { get; set; }
 
-        public string InsertBy { get; set; }
+        public int UserId { get; set; }
         public string ClassId { get; set; }
 
         public int TeacherId { get; set; }
@@ -388,24 +389,25 @@ namespace PreSchoolAPI.Models
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_AddTeacherDetails";
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherName", SqlDbType.VarChar))
-                        .Value = TeacherName;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherBirthDate", SqlDbType.VarChar))
-                        .Value = TeacherBirthDate;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherQualification", SqlDbType.VarChar))
-                        .Value = TeacherQualification;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherAddress", SqlDbType.VarChar))
-                        .Value = TeacherAddress;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherNumber", SqlDbType.VarChar))
-                        .Value = TeacherNumber;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherEmail", SqlDbType.VarChar))
-                        .Value = TeacherEmail;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherExperience", SqlDbType.VarChar))
-                        .Value = TeacherExperience;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherJoiningDate", SqlDbType.VarChar))
-                        .Value = TeacherJoiningDate;
-                    oCommand.Parameters.Add(new SqlParameter("@InsertBy", SqlDbType.VarChar))
-                        .Value = InsertBy;
+                    
+                    oCommand.Parameters.Add(new SqlParameter("@Name", SqlDbType.VarChar))
+                        .Value = Name;
+                    oCommand.Parameters.Add(new SqlParameter("@BirthDate", SqlDbType.VarChar))
+                        .Value = BirthDate;
+                    oCommand.Parameters.Add(new SqlParameter("@Qualification", SqlDbType.VarChar))
+                        .Value = Qualification;
+                    oCommand.Parameters.Add(new SqlParameter("@Address", SqlDbType.VarChar))
+                        .Value = Address;
+                    oCommand.Parameters.Add(new SqlParameter("@Phoneno", SqlDbType.VarChar))
+                        .Value = Phoneno;
+                    oCommand.Parameters.Add(new SqlParameter("@Email", SqlDbType.VarChar))
+                        .Value = Email;
+                    oCommand.Parameters.Add(new SqlParameter("@Experience", SqlDbType.VarChar))
+                        .Value = Experience;
+                    oCommand.Parameters.Add(new SqlParameter("@JoiningDate", SqlDbType.VarChar))
+                        .Value = JoiningDate;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.VarChar))
+                        .Value = UserId;
                     try
                     {
                         oCommand.ExecuteNonQuery();
@@ -433,8 +435,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_GetTeacherDetailslist";
                     SqlParameter param;
-                    param = oCommand.Parameters.Add("@TeacherId", SqlDbType.Int);
-                    param.Value = TeacherId;
+                    param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                    param.Value = Id;
                     try
 
                     {
@@ -444,13 +446,14 @@ namespace PreSchoolAPI.Models
                             teacherModels.Add(
                                 new TeacherModel
                                 {
-                                    TeacherName = dr["TeacherName"].ToString(),
-                                    TeacherBirthDate = dr["TeacherBirthDate"].ToString(),
-                                    TeacherQualification = dr["TeacherQualification"].ToString(),
-                                    TeacherAddress = dr["TeacherAddress"].ToString(),
-                                    TeacherNumber = dr["TeacherNumber"].ToString(),
-                                    TeacherEmail = dr["TeacherEmail"].ToString(),
-                                    TeacherExperience = dr["TeacherExperience"].ToString()
+                                    Id = Convert.ToInt32(dr["Id"].ToString()),
+                                   Name = dr["Name"].ToString(),
+                                    BirthDate = dr["BirthDate"].ToString(),
+                                    Qualification = dr["Qualification"].ToString(),
+                                    Address = dr["Address"].ToString(),
+                                    Phoneno = dr["Phoneno"].ToString(),
+                                    Email = dr["Email"].ToString(),
+                                    Experience = dr["Experience"].ToString()
                                 });
                         }
                     }
@@ -484,13 +487,14 @@ namespace PreSchoolAPI.Models
                             teacherModels.Add(
                                 new TeacherModel
                                 {
-                                    TeacherName = dr["TeacherName"].ToString(),
-                                    TeacherBirthDate = dr["TeacherBirthDate"].ToString(),
-                                    TeacherQualification = dr["TeacherQualification"].ToString(),
-                                    TeacherAddress = dr["TeacherAddress"].ToString(),
-                                    TeacherNumber = dr["TeacherNumber"].ToString(),
-                                    TeacherEmail = dr["TeacherEmail"].ToString(),
-                                    TeacherExperience = dr["TeacherExperience"].ToString()
+                                    Id = Convert.ToInt32(dr["Id"].ToString()),
+                                    Name = dr["Name"].ToString(),
+                                    BirthDate = dr["BirthDate"].ToString(),
+                                    Qualification = dr["Qualification"].ToString(),
+                                    Address = dr["Address"].ToString(),
+                                    Phoneno = dr["Phoneno"].ToString(),
+                                    Email = dr["Email"].ToString(),
+                                    Experience = dr["Experience"].ToString()
                                 });
                         }
                     }
@@ -524,8 +528,8 @@ namespace PreSchoolAPI.Models
                             AddTeacherNameDropdownModels.Add(
                             new TeacherModel
                             {
-                                TeacherId = Convert.ToInt32(dr["TeacherId"].ToString()),
-                                TeacherName = (dr["TeacherName"].ToString())
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                Name = (dr["Name"].ToString())
                             }
                             );
                         }
@@ -922,7 +926,7 @@ namespace PreSchoolAPI.Models
                             ClassModels.Add(
                             new ClassModel
                             {
-                                ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                                ClassId = Convert.ToInt32(dr["Id"].ToString()),
                                 ClassName = dr["ClassName"].ToString(),
                             }
                             );
@@ -937,6 +941,37 @@ namespace PreSchoolAPI.Models
             }
             return ClassModels;
         }
+        public string AssignClassToTeacher()
+        {
+            string AddClassDetails1Return = "";
+            string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connetionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_AssignClassToTeacher";
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.VarChar))
+                    .Value = ClassId;
+                    oCommand.Parameters.Add(new SqlParameter("@TeacherId", SqlDbType.VarChar))
+                    .Value = TeacherId;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.VarChar))
+                  .Value = UserId;
+                    try
+                    {
+                        oCommand.ExecuteNonQuery();
+                        AddClassDetails1Return = "Success";
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        AddClassDetails1Return = "Failure";
+                    }
+                }
+            }
+            return AddClassDetails1Return;
+        }
     }
 
     public class PhotoAlbumModel
@@ -948,7 +983,7 @@ namespace PreSchoolAPI.Models
         public string AlbumDate { get; set; }
         public string month { get; set; }
         public string year { get; set; }
-        public int CreatedBy { get; set; }
+        public int UserId { get; set; }
 
         public string AddPhotoAlbum()
         {
@@ -970,8 +1005,8 @@ namespace PreSchoolAPI.Models
                    .Value = Class;
                     oCommand.Parameters.Add(new SqlParameter("@AlbumDate", SqlDbType.VarChar))
                    .Value = AlbumDate;
-                    oCommand.Parameters.Add(new SqlParameter("@CreatedBy", SqlDbType.Int))
-                        .Value = CreatedBy;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                        .Value = UserId;
 
                     try
                     {

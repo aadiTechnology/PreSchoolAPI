@@ -233,6 +233,14 @@ namespace TestCORS.Controllers
             return classModel.GetClassNameList();
         }
 
+        [HttpPost]
+        [Route("AssignClassToTeacher")]
+        public string AssignClassToTeacher([FromBody] ClassModel classModel)
+        {
+            
+            return classModel.AssignClassToTeacher();
+        }
+
 
     }
 
