@@ -552,6 +552,7 @@ namespace PreSchoolAPI.Models
         public string AssignDate { get; set; }
         public string Attachment { get; set; }
         public int UserId { get; set; }
+        public int TeacherId { get; set; }
         public string AddHomeworkDetails()
 
         {
@@ -579,6 +580,8 @@ namespace PreSchoolAPI.Models
                        .Value = Attachment;
                     oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
                        .Value = UserId;
+                    oCommand.Parameters.Add(new SqlParameter("@TeacherId", SqlDbType.Int))
+                        .Value = TeacherId;
 
                     try
                     {
@@ -1178,6 +1181,7 @@ namespace PreSchoolAPI.Models
         public string LoginPassword { get; set; }
         public string UserType { get; set; }
         public string BirthDate { get; set; }
+        public string EmailIdOrPhone { get; set; }
         public UserLoginModel UserLogin()
         {
 
@@ -1192,10 +1196,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_GetLoginType";
                     SqlParameter param;
-                    param = oCommand.Parameters.Add("@EmailId", SqlDbType.VarChar);
-                    param.Value = EmailId;
-                    param = oCommand.Parameters.Add("@PhoneNo", SqlDbType.VarChar);
-                    param.Value = PhoneNo;
+                    param = oCommand.Parameters.Add("@EmailIdOrPhone", SqlDbType.VarChar);
+                    param.Value = EmailIdOrPhone;
                     param = oCommand.Parameters.Add("@LoginPassword", SqlDbType.VarChar);
                     param.Value = LoginPassword;
 
