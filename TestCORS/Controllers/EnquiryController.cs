@@ -170,7 +170,7 @@ namespace TestCORS.Controllers
 
         [HttpPost]
         [Route("GetAllAlbumNameList")]
-        public List<PhotoAlbumModel> GetAllAlbumNameList()
+        public List<PhotoAlbumModel> GetAllAlbumNameList([FromBody] PhotoAlbumModel photoAlbumModel)
         {
             PhotoAlbumModel photoModel = new PhotoAlbumModel();
             return photoModel.GetAllAlbumNameList();
@@ -241,6 +241,13 @@ namespace TestCORS.Controllers
             return classModel.AssignClassToTeacher();
         }
 
+        [HttpPost]
+        [Route("GetSubjectNameDropdown")]
+        public List<SubjectModel> GetSubjectNameDropdown()
+        {
+            SubjectModel classModel = new SubjectModel();
+            return classModel.GetSubjectNameDropdown();
+        }
 
     }
 

@@ -550,13 +550,16 @@ namespace PreSchoolAPI.Models
     public class HomeworkDetailsModel
     {
         public int Id { get; set; }
-        public string Class { get; set; }
-        public string SubjectName { get; set; }
+        public int ClassId { get; set; }
+        public int SubjectId { get; set; }
         public string SubjectDescription { get; set; }
         public string AssignDate { get; set; }
         public string Attachment { get; set; }
         public int UserId { get; set; }
-        public int TeacherId { get; set; }
+        public int UserRoleId { get; set; }
+        
+        public string ClassName { get; set; }
+        public string SubjectName { get; set; }
         public string AddHomeworkDetails()
 
         {
@@ -572,10 +575,10 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandText = "USP_AddHomeworkDetails";
 
 
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
-                        .Value = Class;
-                    oCommand.Parameters.Add(new SqlParameter("@SubjectName", SqlDbType.VarChar))
-                      .Value = SubjectName;
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.VarChar))
+                        .Value = ClassId;
+                    oCommand.Parameters.Add(new SqlParameter("@SubjectId", SqlDbType.VarChar))
+                      .Value = SubjectId;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar))
                         .Value = SubjectDescription;
                     oCommand.Parameters.Add(new SqlParameter("@AssignDate", SqlDbType.VarChar))
@@ -584,8 +587,10 @@ namespace PreSchoolAPI.Models
                        .Value = Attachment;
                     oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
                        .Value = UserId;
-                    oCommand.Parameters.Add(new SqlParameter("@TeacherId", SqlDbType.Int))
-                        .Value = TeacherId;
+                    oCommand.Parameters.Add(new SqlParameter("@UserRoleId", SqlDbType.Int))
+                       .Value = UserRoleId;
+
+
 
                     try
                     {
@@ -663,7 +668,8 @@ namespace PreSchoolAPI.Models
                             homeworkdetailsModel.Add(
                                 new HomeworkDetailsModel
                                 {
-                                    Class = dr["Class"].ToString(),
+                                    Id = Convert.ToInt32(dr["Id"].ToString()),
+                                    ClassName = dr["ClassName"].ToString(),
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
@@ -692,7 +698,6 @@ namespace PreSchoolAPI.Models
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_GetHomeworkList";
-
                     try
                     {
                         SqlDataReader dr = oCommand.ExecuteReader();
@@ -702,7 +707,7 @@ namespace PreSchoolAPI.Models
                                 new HomeworkDetailsModel
                                 {
                                     Id = Convert.ToInt32(dr["Id"].ToString()),
-                                    Class = dr["Class"].ToString(),
+                                    ClassName = dr["ClassName"].ToString(),
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
@@ -781,7 +786,7 @@ namespace PreSchoolAPI.Models
                             viewhomeworkModel = new HomeworkDetailsModel
                             {
                                 AssignDate = dr["AssignDate"].ToString(),
-                                SubjectName = dr["SubjectName"].ToString()
+                                SubjectId = Convert.ToInt32(dr["SubjectName"].ToString())
                                 
                             };
                         }
@@ -820,7 +825,7 @@ namespace PreSchoolAPI.Models
                             HomeworkDetails = new HomeworkDetailsModel
                             {
                                 Id = Convert.ToInt32(dr["Id"].ToString()),
-                                Class = dr["Class"].ToString(),
+                                ClassName = dr["ClassName"].ToString(),
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
                                 AssignDate = dr["AssignDate"].ToString(),
@@ -1297,6 +1302,48 @@ namespace PreSchoolAPI.Models
                 }
             }
             return userModel;
+        }
+    }
+
+    public class SubjectModel
+    {
+        public int Id { get; set; }
+        public string SubjectName { get; set; }
+        public List<SubjectModel> GetSubjectNameDropdown()
+        {
+
+            List<SubjectModel> ClassModels = new List<SubjectModel>();
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetSubjectNameDropdown";
+
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            ClassModels.Add(
+                            new SubjectModel
+                            {
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                SubjectName = dr["SubjectName"].ToString(),
+                            }
+                            );
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        // Action after the exception is caught  
+                    }
+                }
+            }
+            return ClassModels;
         }
     }
 
