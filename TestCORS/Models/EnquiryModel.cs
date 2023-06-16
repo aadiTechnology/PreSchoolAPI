@@ -554,6 +554,7 @@ namespace PreSchoolAPI.Models
         public int SubjectId { get; set; }
         public string SubjectDescription { get; set; }
         public string AssignDate { get; set; }
+        public int AcademicId { get; set; }
         public string Attachment { get; set; }
         public int UserId { get; set; }
         public int UserRoleId { get; set; }
@@ -575,14 +576,16 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandText = "USP_AddHomeworkDetails";
 
 
-                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.VarChar))
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
                         .Value = ClassId;
-                    oCommand.Parameters.Add(new SqlParameter("@SubjectId", SqlDbType.VarChar))
+                    oCommand.Parameters.Add(new SqlParameter("@SubjectId", SqlDbType.Int))
                       .Value = SubjectId;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar))
                         .Value = SubjectDescription;
                     oCommand.Parameters.Add(new SqlParameter("@AssignDate", SqlDbType.VarChar))
                        .Value = AssignDate;
+                    oCommand.Parameters.Add(new SqlParameter("@AcademicId", SqlDbType.Int))
+                       .Value = AcademicId;
                     oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
                        .Value = Attachment;
                     oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
