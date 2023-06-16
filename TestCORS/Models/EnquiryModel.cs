@@ -576,6 +576,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandText = "USP_AddHomeworkDetails";
 
 
+                    oCommand.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int))
+                        .Value = Id;
                     oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
                         .Value = ClassId;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectId", SqlDbType.Int))
@@ -612,7 +614,7 @@ namespace PreSchoolAPI.Models
         }
         public string SubmitHomework()
         {
-            string DeleteHomeworkReturn = "";
+            string SubmitHomeworkReturn = "";
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connectionString))
             {
@@ -630,11 +632,11 @@ namespace PreSchoolAPI.Models
                         int result = oCommand.ExecuteNonQuery();
                         if (result >= 1) 
                         {
-                            DeleteHomeworkReturn = "Success";
+                            SubmitHomeworkReturn = "Success";
                         }
                         else
                         {
-                            DeleteHomeworkReturn = "Failure";
+                            SubmitHomeworkReturn = "Failure";
                         }
                         
                     }
@@ -646,7 +648,7 @@ namespace PreSchoolAPI.Models
                     // Action after the exception is caught  
                 }
             }
-            return DeleteHomeworkReturn;
+            return SubmitHomeworkReturn;
         }
         public List<HomeworkDetailsModel> GetHomeworkDetails()
 
