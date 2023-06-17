@@ -71,12 +71,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        addStudentDetailsReturn = "Success";
+                        addStudentDetailsReturn = "Student Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnection.Close();
-                        addStudentDetailsReturn = "Failure";
+                        addStudentDetailsReturn = "Faild to Add Student";
                     }
 
                 }
@@ -179,12 +179,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        addstudentfollowupReturn = "Success";
+                        addstudentfollowupReturn = "FollowUp Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnection.Close();
-                        addstudentfollowupReturn = "Failure";
+                        addstudentfollowupReturn = "Faild to Add FollowUp ";
                     }
 
                 }
@@ -301,12 +301,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        admissionDetails = "Success";
+                        admissionDetails = "Admission Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnecion.Close();
-                        admissionDetails = "Failure";
+                        admissionDetails = "Faild to Add Admission ";
                     }
                 }
             }
@@ -411,12 +411,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        addTeacherDatails = "Success";
+                        addTeacherDatails = "Teacher Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnecion.Close();
-                        addTeacherDatails = "Failure";
+                        addTeacherDatails = "Faild to Add Teacher";
                     }
                 }
             }
@@ -600,12 +600,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        addhomeworkdetailsReturn = "Success";
+                        addhomeworkdetailsReturn = "Homework Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnection.Close();
-                        addhomeworkdetailsReturn = "Failure";
+                        addhomeworkdetailsReturn = "Faild to Add Homework";
                     }
 
                 }
@@ -632,11 +632,11 @@ namespace PreSchoolAPI.Models
                         int result = oCommand.ExecuteNonQuery();
                         if (result >= 1) 
                         {
-                            SubmitHomeworkReturn = "Success";
+                            SubmitHomeworkReturn = "Homework Submited Successfully";
                         }
                         else
                         {
-                            SubmitHomeworkReturn = "Failure";
+                            SubmitHomeworkReturn = "Faild to Submit Homework";
                         }
                         
                     }
@@ -865,13 +865,13 @@ namespace PreSchoolAPI.Models
                         param = oCommand.Parameters.Add("@HomeworkId", SqlDbType.Int);
                         param.Value = Id;
                         oCommand.ExecuteNonQuery();
-                        DeleteHomeworkReturn = "Success";
+                        DeleteHomeworkReturn = "Homework Deleted Successfully";
                     }
                 }
                 catch (Exception e)
                 {
                     oConnection.Close();
-                    DeleteHomeworkReturn = "Failure";
+                    DeleteHomeworkReturn = "Faild to Delete Homework ";
                     // Action after the exception is caught  
                 }
             }
@@ -905,12 +905,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        AddClassDetails1Return = "Success";
+                        AddClassDetails1Return = "Class Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnection.Close();
-                        AddClassDetails1Return = "Failure";
+                        AddClassDetails1Return = "Faild to Add Class";
                     }
                 }
             }
@@ -972,12 +972,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        AddClassDetails1Return = "Success";
+                        AddClassDetails1Return = "Assign Class To Teacher Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnection.Close();
-                        AddClassDetails1Return = "Failure";
+                        AddClassDetails1Return = "Faild to Add Assign Class To Teacher";
                     }
                 }
             }
@@ -1022,12 +1022,12 @@ namespace PreSchoolAPI.Models
                     try
                     {
                         oCommand.ExecuteNonQuery();
-                        AddPhotoAlbumReturn = "Success";
+                        AddPhotoAlbumReturn = "Photo Album Added Successfully";
                     }
                     catch (Exception e)
                     {
                         oConnection.Close();
-                        AddPhotoAlbumReturn = "Failure";
+                        AddPhotoAlbumReturn = "Faild to Add Photo Album";
                     }
 
                 }
@@ -1206,13 +1206,13 @@ namespace PreSchoolAPI.Models
                         param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
                         param.Value = Id;
                         oCommand.ExecuteNonQuery();
-                        DeletePhotoalbumReturn = "Success";
+                        DeletePhotoalbumReturn = "Photo Album Deleted Successfully";
                     }
                 }
                 catch (Exception e)
                 {
                     oConnection.Close();
-                    DeletePhotoalbumReturn = "Failure";
+                    DeletePhotoalbumReturn = "Faild to Delete Photo Album ";
                      
                 }
             }
