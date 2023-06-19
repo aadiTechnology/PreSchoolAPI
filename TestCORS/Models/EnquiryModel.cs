@@ -561,6 +561,7 @@ namespace PreSchoolAPI.Models
         
         public string ClassName { get; set; }
         public string SubjectName { get; set; }
+        public bool IsSubmited { get; set; }
         public string AddHomeworkDetails()
 
         {
@@ -716,7 +717,8 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString()
+                                    Attachment = dr["Attachment"].ToString(),
+                                    IsSubmited = Convert.ToBoolean(dr["IsSubmited"].ToString())
                                 });
                         }
                     }
@@ -767,10 +769,10 @@ namespace PreSchoolAPI.Models
             }
             return viewhomeworkModel;
         }
-        public HomeworkDetailsModel GetDateForLegend()
+        public List<HomeworkDetailsModel> GetDateForLegend()
 
         {
-            HomeworkDetailsModel viewhomeworkModel = new HomeworkDetailsModel();
+            List<HomeworkDetailsModel> viewhomeworkModel = new List<HomeworkDetailsModel>();
             string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connectionstring))
             {
@@ -788,14 +790,16 @@ namespace PreSchoolAPI.Models
                         while (dr.Read())
                         {
 
-                            viewhomeworkModel = new HomeworkDetailsModel
+                            viewhomeworkModel.Add( new HomeworkDetailsModel
                             {
                                 AssignDate = dr["AssignDate"].ToString(),
                                 SubjectName = dr["SubjectName"].ToString()
                                 
-                            };
+                            });
                         }
                     }
+
+                    
                     catch (Exception e)
                     {
                         oConnection.Close();
