@@ -1181,7 +1181,8 @@ namespace PreSchoolAPI.Models
                             albumModels.Add(
                                new PhotoAlbumModel
                                {
-                                   Title = dr["Title"].ToString()
+                                   Title = dr["Title"].ToString(),
+                                   FacebookLink = dr["FacebookLink"].ToString()
                                });
                         }
                     }
