@@ -996,6 +996,8 @@ namespace PreSchoolAPI.Models
         public string year { get; set; }
         public int UserId { get; set; }
 
+        public int ClassId { get; set; }
+
         public string AddPhotoAlbum()
         {
             string AddPhotoAlbumReturn = "";
@@ -1012,8 +1014,8 @@ namespace PreSchoolAPI.Models
                     .Value = Title;
                     oCommand.Parameters.Add(new SqlParameter("@FacebookLink", SqlDbType.VarChar))
                    .Value = FacebookLink;
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
-                   .Value = Class;
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
+                   .Value = ClassId;
                     oCommand.Parameters.Add(new SqlParameter("@AlbumDate", SqlDbType.VarChar))
                    .Value = AlbumDate;
                     oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
@@ -1060,7 +1062,7 @@ namespace PreSchoolAPI.Models
                             {
                                 Id = Convert.ToInt32(dr["Id"].ToString()),
                                 Title = dr["Title"].ToString(),
-                                Class = dr["Class"].ToString(),
+                                Class = dr["ClassName"].ToString(),
                                 AlbumDate = dr["AlbumDate"].ToString(),
                                 FacebookLink = dr["FacebookLink"].ToString()
 
