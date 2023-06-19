@@ -791,7 +791,7 @@ namespace PreSchoolAPI.Models
                             viewhomeworkModel = new HomeworkDetailsModel
                             {
                                 AssignDate = dr["AssignDate"].ToString(),
-                                SubjectId = Convert.ToInt32(dr["SubjectName"].ToString())
+                                SubjectId = Convert.ToInt32(dr["SubjectId"].ToString())
                                 
                             };
                         }
