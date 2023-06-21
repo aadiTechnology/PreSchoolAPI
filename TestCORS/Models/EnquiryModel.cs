@@ -560,6 +560,7 @@ namespace PreSchoolAPI.Models
         
         public string ClassName { get; set; }
         public string SubjectName { get; set; }
+        public bool IsSubmited { get; set; }
         public string AddHomeworkDetails()
 
         {
@@ -715,7 +716,8 @@ namespace PreSchoolAPI.Models
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString()
+                                    Attachment = dr["Attachment"].ToString(),
+                                    IsSubmited = Convert.ToBoolean(dr["IsSubmited"].ToString())
                                 });
                         }
                     }
@@ -766,10 +768,10 @@ namespace PreSchoolAPI.Models
             }
             return viewhomeworkModel;
         }
-        public HomeworkDetailsModel GetDateForLegend()
+        public List<HomeworkDetailsModel> GetDateForLegend()
 
         {
-            HomeworkDetailsModel viewhomeworkModel = new HomeworkDetailsModel();
+            List<HomeworkDetailsModel> viewhomeworkModel = new List<HomeworkDetailsModel>();
             string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connectionstring))
             {
@@ -787,14 +789,16 @@ namespace PreSchoolAPI.Models
                         while (dr.Read())
                         {
 
-                            viewhomeworkModel = new HomeworkDetailsModel
+                            viewhomeworkModel.Add( new HomeworkDetailsModel
                             {
                                 AssignDate = dr["AssignDate"].ToString(),
-                                SubjectId = Convert.ToInt32(dr["SubjectName"].ToString())
+                                SubjectName = dr["SubjectName"].ToString()
                                 
-                            };
+                            });
                         }
                     }
+
+                    
                     catch (Exception e)
                     {
                         oConnection.Close();
@@ -995,6 +999,8 @@ namespace PreSchoolAPI.Models
         public string year { get; set; }
         public int UserId { get; set; }
 
+        public int ClassId { get; set; }
+
         public string AddPhotoAlbum()
         {
             string AddPhotoAlbumReturn = "";
@@ -1011,8 +1017,8 @@ namespace PreSchoolAPI.Models
                     .Value = Title;
                     oCommand.Parameters.Add(new SqlParameter("@FacebookLink", SqlDbType.VarChar))
                    .Value = FacebookLink;
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
-                   .Value = Class;
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
+                   .Value = ClassId;
                     oCommand.Parameters.Add(new SqlParameter("@AlbumDate", SqlDbType.VarChar))
                    .Value = AlbumDate;
                     oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
@@ -1059,7 +1065,7 @@ namespace PreSchoolAPI.Models
                             {
                                 Id = Convert.ToInt32(dr["Id"].ToString()),
                                 Title = dr["Title"].ToString(),
-                                Class = dr["Class"].ToString(),
+                                Class = dr["ClassName"].ToString(),
                                 AlbumDate = dr["AlbumDate"].ToString(),
                                 FacebookLink = dr["FacebookLink"].ToString()
 
@@ -1174,7 +1180,8 @@ namespace PreSchoolAPI.Models
                             albumModels.Add(
                                new PhotoAlbumModel
                                {
-                                   Title = dr["Title"].ToString()
+                                   Title = dr["Title"].ToString(),
+                                   FacebookLink = dr["FacebookLink"].ToString()
                                });
                         }
                     }

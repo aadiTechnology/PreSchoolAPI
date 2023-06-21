@@ -131,7 +131,7 @@ namespace TestCORS.Controllers
 
         [HttpPost]
         [Route("GetDateForLegend")]
-        public HomeworkDetailsModel GetDateForLegend([FromBody] HomeworkDetailsModel homeworkDetails)
+        public List<HomeworkDetailsModel> GetDateForLegend([FromBody] HomeworkDetailsModel homeworkDetails)
         {
             return homeworkDetails.GetDateForLegend();
         }
