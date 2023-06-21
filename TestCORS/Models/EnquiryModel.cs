@@ -13,7 +13,7 @@ namespace PreSchoolAPI.Models
     {
         public int Id { get; set; }
         public string Class { get; set; }
-
+        public int ClassId { get; set; }
         public string StudentName { get; set; }
         public string BirthDate { get; set; }
         public int Age { get; set; }
@@ -24,13 +24,10 @@ namespace PreSchoolAPI.Models
         public string SocietyName { get; set; }
         public string StudentAddress { get; set; }
         public string EmailId { get; set; }
-        public bool sms1 { get; set; }
-
-        public string CallStatus { get; set; }
-        public string Reminder { get; set; }
-        public string Comment { get; set; }
         public int StudentDetailsId { get; set; }
         public bool SMS { get; set; }
+
+        public int UserId { get; set; }
         public string AddStudentDetails()
         {
             string addStudentDetailsReturn = "";
@@ -43,8 +40,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_AddStudentDetails";
 
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
-                        .Value = Class;
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.VarChar))
+                        .Value = ClassId;
 
                     oCommand.Parameters.Add(new SqlParameter("@StudentName", SqlDbType.VarChar))
                         .Value = StudentName;
@@ -68,6 +65,8 @@ namespace PreSchoolAPI.Models
                         .Value = EmailId;
                     oCommand.Parameters.Add(new SqlParameter("@SMS", SqlDbType.VarChar))
                         .Value = SMS;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.VarChar))
+                        .Value = UserId;
                     try
                     {
                         oCommand.ExecuteNonQuery();
@@ -248,18 +247,19 @@ namespace PreSchoolAPI.Models
     public class AdmissionDetails
     {
         public int Id { get; set; }
-        public string Class { get; set; }
+        public int ClassId { get; set; }
         public string StudentName { get; set; }
         public string FatherName { get; set; }
-        public string PhoneNumber { get; set; }
+        public string PhoneNo { get; set; }
         public string MotherName { get; set; }
-        public string PhoneNumber1 { get; set; }
+        public string PhoneNo1 { get; set; }
         public string Address { get; set; }
-        public string Email { get; set; }
+        public string EmailId { get; set; }
         public bool Sms { get; set; }
         public string Camera { get; set; }
         public string Attachment { get; set; }
         public string BirthDate { get; set; }
+        public int UserId { get; set; }
 
         public string AdmissionConversion()
         {
@@ -271,31 +271,31 @@ namespace PreSchoolAPI.Models
                 using (SqlCommand oCommand = oConnecion.CreateCommand())
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_AddAdmissionDetails";
-                    oCommand.Parameters.Add(new SqlParameter("@Class", SqlDbType.VarChar))
-                        .Value = Class;
+                    oCommand.CommandText = "USP_AddAdmissionConversionDetails";
+                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.VarChar))
+                        .Value = ClassId;
                     oCommand.Parameters.Add(new SqlParameter("@StudentName", SqlDbType.VarChar))
                         .Value = StudentName;
                     oCommand.Parameters.Add(new SqlParameter("@FatherName", SqlDbType.VarChar))
                         .Value = FatherName;
-                    oCommand.Parameters.Add(new SqlParameter("@PhoneNumber", SqlDbType.VarChar))
-                        .Value = PhoneNumber;
+                    oCommand.Parameters.Add(new SqlParameter("@PhoneNo", SqlDbType.VarChar))
+                        .Value = PhoneNo;
                     oCommand.Parameters.Add(new SqlParameter("@MotherName", SqlDbType.VarChar))
                         .Value = MotherName;
-                    oCommand.Parameters.Add(new SqlParameter("@PhoneNumber1", SqlDbType.VarChar))
-                        .Value = PhoneNumber1;
-                    oCommand.Parameters.Add(new SqlParameter("@Address", SqlDbType.VarChar))
-                        .Value = Address;
-                    oCommand.Parameters.Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                        .Value = Email;
-                    oCommand.Parameters.Add(new SqlParameter("@Sms", SqlDbType.VarChar))
-                        .Value = Sms;
-                    oCommand.Parameters.Add(new SqlParameter("@Camera", SqlDbType.VarChar))
-                        .Value = Camera;
-                    oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
-                        .Value = Attachment;
+                    oCommand.Parameters.Add(new SqlParameter("@PhoneNo1", SqlDbType.VarChar))
+                        .Value = PhoneNo1;
+                    oCommand.Parameters.Add(new SqlParameter("@EmailId", SqlDbType.VarChar))
+                        .Value = EmailId;
                     oCommand.Parameters.Add(new SqlParameter("@BirthDate", SqlDbType.VarChar))
                         .Value = BirthDate;
+                    oCommand.Parameters.Add(new SqlParameter("@Address", SqlDbType.VarChar))
+                        .Value = Address;
+                    oCommand.Parameters.Add(new SqlParameter("@Sms", SqlDbType.VarChar))
+                        .Value = Sms;
+                    oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
+                        .Value = Attachment;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.VarChar))
+                       .Value = UserId;
 
 
                     try
@@ -335,16 +335,15 @@ namespace PreSchoolAPI.Models
                             admissiondetailsModel.Add(
                                 new AdmissionDetails
                                 {
-                                    Class = dr["Class"].ToString(),
+                                    ClassId =Convert.ToInt32(dr["ClassId"].ToString()),
                                     StudentName = dr["StudentName"].ToString(),
                                     FatherName = dr["FatherName"].ToString(),
-                                    PhoneNumber = dr["PhoneNumber"].ToString(),
+                                    PhoneNo = dr["PhoneNo"].ToString(),
                                     MotherName = dr["MotherName"].ToString(),
-                                    PhoneNumber1 = dr["PhoneNumber1"].ToString(),
+                                    PhoneNo1 = dr["PhoneNo1"].ToString(),
                                     Address = dr["Address"].ToString(),
-                                    Email = dr["Email"].ToString(),
+                                    EmailId = dr["EmailId"].ToString(),
                                     Sms = Convert.ToBoolean(dr["Sms"].ToString()),
-                                    Camera = dr["Camera"].ToString(),
                                     Attachment = dr["Attachment"].ToString(),
                                 });
                         }
