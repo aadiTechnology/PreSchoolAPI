@@ -561,6 +561,13 @@ namespace PreSchoolAPI.Models
         public string ClassName { get; set; }
         public string SubjectName { get; set; }
         public bool IsSubmited { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+
+        public string HomeworkDate { get; set; }
+        public bool AllowPrevious { get; set; }
+        public bool AllowNext { get; set; }
+
         public string AddHomeworkDetails()
 
         {
@@ -691,6 +698,49 @@ namespace PreSchoolAPI.Models
             }
             return homeworkdetailsModel;
         }
+
+        public List<HomeworkDetailsModel> GetDatewiseHomeworkDetails()
+
+        {
+            List<HomeworkDetailsModel> homeworkdetailsModel = new List<HomeworkDetailsModel>();
+            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionstring))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetDatewiseHomeworkDetails";
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@StartDate", SqlDbType.VarChar);
+                    param.Value = StartDate;
+                    param = oCommand.Parameters.Add("@EndDate", SqlDbType.VarChar);
+                    param.Value = EndDate;
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            homeworkdetailsModel.Add(
+                                new HomeworkDetailsModel
+                                {
+                                    HomeworkDate = dr["HomeworkDate"].ToString(),
+                                    //AllowPrevious = Convert.ToBoolean(dr["AllowPrevious"].ToString()),
+                                    //AllowNext = Convert.ToBoolean(dr["AllowNext"].ToString())
+
+                                });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+
+                    }
+                }
+            }
+            return homeworkdetailsModel;
+        }
+
         public List<HomeworkDetailsModel> GetHomeworkDetailsList()
 
         {
@@ -1234,6 +1284,8 @@ namespace PreSchoolAPI.Models
         public string UserType { get; set; }
         public string BirthDate { get; set; }
         public string EmailIdOrPhone { get; set; }
+
+        public int UserId { get; set; }
         public UserLoginModel UserLogin()
         {
 
@@ -1314,6 +1366,45 @@ namespace PreSchoolAPI.Models
                 }
             }
             return userModel;
+        }
+
+        public string AddUserLoginInfo()
+        {
+            string AddPhotoAlbumReturn = "";
+            string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connetionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_AddUserLoginInfo";
+
+                    oCommand.Parameters.Add(new SqlParameter("@EmailId", SqlDbType.VarChar))
+                    .Value = EmailId;
+                    oCommand.Parameters.Add(new SqlParameter("@PhoneNo", SqlDbType.VarChar))
+                   .Value = PhoneNo;
+                    oCommand.Parameters.Add(new SqlParameter("@BirthDate", SqlDbType.VarChar))
+                   .Value = BirthDate;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                        .Value = UserId;
+
+                    try
+                    {
+                        oCommand.ExecuteNonQuery();
+                        AddPhotoAlbumReturn = "user login added";
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        AddPhotoAlbumReturn = "Faild to Add user login";
+                    }
+
+                }
+
+            }
+            return AddPhotoAlbumReturn;
+
         }
     }
 

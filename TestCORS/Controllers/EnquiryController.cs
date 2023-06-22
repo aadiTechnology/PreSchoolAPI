@@ -112,6 +112,14 @@ namespace TestCORS.Controllers
         {
             return homeworkDetails.GetHomeworkDetails();
         }
+
+        [HttpPost]
+        [Route("GetDatewiseHomeworkDetails")]
+        public List<HomeworkDetailsModel> GetDatewiseHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
+        {
+            return homeworkDetails.GetDatewiseHomeworkDetails();
+        }
+
         [HttpPost]
         [Route("GetHomeworkDetailsList")]
         public List<HomeworkDetailsModel> GetHomeworkDetailsList()
@@ -214,6 +222,14 @@ namespace TestCORS.Controllers
         {
 
             return userLoginModel.UserLogin();
+        }
+
+        [HttpPost]
+        [Route("AddUserLoginInfo")]
+        public string AddUserLoginInfo([FromBody] UserLoginModel userLoginModel)
+        {
+
+            return userLoginModel.AddUserLoginInfo();
         }
 
 
