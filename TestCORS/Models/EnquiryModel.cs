@@ -564,7 +564,7 @@ namespace PreSchoolAPI.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
 
-        public string HomeworkDate { get; set; }
+        public List<string> HomeworkDate { get; set; }
         public bool AllowPrevious { get; set; }
         public bool AllowNext { get; set; }
 
@@ -699,10 +699,11 @@ namespace PreSchoolAPI.Models
             return homeworkdetailsModel;
         }
 
-        public List<HomeworkDetailsModel> GetDatewiseHomeworkDetails()
+        public HomeworkDetailsModel GetDatewiseHomeworkDetails()
 
         {
-            List<HomeworkDetailsModel> homeworkdetailsModel = new List<HomeworkDetailsModel>();
+            HomeworkDetailsModel homeworkdetailsModel = new HomeworkDetailsModel();
+            homeworkdetailsModel.HomeworkDate = new List<string>();
             string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connectionstring))
             {
@@ -721,14 +722,16 @@ namespace PreSchoolAPI.Models
                         SqlDataReader dr = oCommand.ExecuteReader();
                         while (dr.Read())
                         {
-                            homeworkdetailsModel.Add(
-                                new HomeworkDetailsModel
-                                {
-                                    HomeworkDate = dr["HomeworkDate"].ToString(),
-                                    //AllowPrevious = Convert.ToBoolean(dr["AllowPrevious"].ToString()),
-                                    //AllowNext = Convert.ToBoolean(dr["AllowNext"].ToString())
 
-                                });
+                            homeworkdetailsModel.HomeworkDate.Add( dr["HomeworkDate"].ToString());
+                        }
+                        while (dr.NextResult())
+                        {
+                            while (dr.Read())
+                            {
+                                homeworkdetailsModel.AllowPrevious = Convert.ToBoolean(dr["AllowPrevious"].ToString());
+                                homeworkdetailsModel.AllowNext = Convert.ToBoolean(dr["AllowNext"].ToString());
+                            }
                         }
                     }
                     catch (Exception e)

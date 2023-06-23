@@ -115,7 +115,7 @@ namespace TestCORS.Controllers
 
         [HttpPost]
         [Route("GetDatewiseHomeworkDetails")]
-        public List<HomeworkDetailsModel> GetDatewiseHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
+        public HomeworkDetailsModel GetDatewiseHomeworkDetails([FromBody] HomeworkDetailsModel homeworkDetails)
         {
             return homeworkDetails.GetDatewiseHomeworkDetails();
         }
