@@ -599,8 +599,6 @@ namespace PreSchoolAPI.Models
                        .Value = Attachment;
                     oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
                        .Value = UserId;
-                    oCommand.Parameters.Add(new SqlParameter("@UserRoleId", SqlDbType.Int))
-                       .Value = UserRoleId;
 
 
 
