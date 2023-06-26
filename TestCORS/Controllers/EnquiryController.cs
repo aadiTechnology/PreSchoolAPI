@@ -10,10 +10,10 @@ namespace TestCORS.Controllers
     public class EnquiryController : ApiController
     {
         [HttpPost]
-        [Route("AddStudentDetails")]
-        public string AddStudentDetails([FromBody] EnquiryModel enquiryModel)
+        [Route("AddStudentEnquiryDetails")]
+        public string AddStudentEnquiryDetails([FromBody] EnquiryModel enquiryModel)
         {
-            return enquiryModel.AddStudentDetails();
+            return enquiryModel.AddStudentEnquiryDetails();
         }
 
         //get GetStudentDetails

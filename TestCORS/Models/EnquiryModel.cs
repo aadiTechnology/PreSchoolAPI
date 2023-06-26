@@ -28,7 +28,7 @@ namespace PreSchoolAPI.Models
         public bool SMS { get; set; }
 
         public int UserId { get; set; }
-        public string AddStudentDetails()
+        public string AddStudentEnquiryDetails()
         {
             string addStudentDetailsReturn = "";
             string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
@@ -38,7 +38,7 @@ namespace PreSchoolAPI.Models
                 using (SqlCommand oCommand = oConnection.CreateCommand())
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_AddStudentDetails";
+                    oCommand.CommandText = "USP_AddStudentEnquiryDetails";
 
                     oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.VarChar))
                         .Value = ClassId;
