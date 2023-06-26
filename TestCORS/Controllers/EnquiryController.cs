@@ -16,6 +16,14 @@ namespace TestCORS.Controllers
             return enquiryModel.AddStudentEnquiryDetails();
         }
 
+        [HttpPost]
+        [Route("GetStudentEnquiryDetailsList")]
+        public List<EnquiryModel> GetStudentEnquiryDetailsList()
+        {
+            EnquiryModel enquiryModel = new EnquiryModel();
+            return enquiryModel.GetStudentEnquiryDetailsList();
+        }
+
         //get GetStudentDetails
         [HttpPost]
         [Route("GetStudentDetails")]

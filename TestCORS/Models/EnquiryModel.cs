@@ -28,6 +28,9 @@ namespace PreSchoolAPI.Models
         public bool SMS { get; set; }
 
         public int UserId { get; set; }
+        public DateTime InsertedDate { get; set; }
+
+        public string ClassName { get; set; }
         public string AddStudentEnquiryDetails()
         {
             string addStudentDetailsReturn = "";
@@ -81,6 +84,47 @@ namespace PreSchoolAPI.Models
                 }
             }
             return addStudentDetailsReturn;
+        }
+
+        public List<EnquiryModel> GetStudentEnquiryDetailsList()
+        {
+            List<EnquiryModel> EnquiryModels = new List<EnquiryModel>();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetStudentEnquiryDetailsList";
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            EnquiryModels.Add(
+                            new EnquiryModel
+                            {
+
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                ClassName = dr["ClassName"].ToString(),
+                                StudentName = dr["StudentName"].ToString(),
+                                FatherName = dr["FatherName"].ToString(),
+                                PhoneNo = dr["PhoneNo"].ToString()
+
+                            }
+                            ); ;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        // Action after the exception is caught  
+                    }
+                }
+            }
+            return EnquiryModels;
         }
 
         public List<EnquiryModel> GetStudentDetails()
