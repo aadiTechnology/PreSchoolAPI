@@ -146,11 +146,12 @@ namespace PreSchoolAPI.Models
         public string CallStatus { get; set; }
         public string Reminder { get; set; }
         public string Comment { get; set; }
-
+        public string EmailId { get; set; }
         public string FatherName { get; set; }
         public string PhoneNo { get; set; }
         public string MotherName { get; set; }
         public string PhoneNo2 { get; set; }
+        public string ClassName { get; set; }
 
 
         public string AddStudentFollowUp()
@@ -165,6 +166,9 @@ namespace PreSchoolAPI.Models
                 {
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_AddStudentFollowUp";
+
+                    oCommand.Parameters.Add(new SqlParameter("@Id", SqlDbType.VarChar))
+                        .Value = Id;
 
                     oCommand.Parameters.Add(new SqlParameter("@CallStatus", SqlDbType.VarChar))
                         .Value = CallStatus;
@@ -227,6 +231,55 @@ namespace PreSchoolAPI.Models
                                     CallStatus = dr["CallStatus"].ToString(),
                                     Reminder = dr["Reminder"].ToString(),
                                     Comment = dr["Comment"].ToString(),
+                                }
+                                );
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        // Action after the exception is caught  
+                    }
+                }
+            }
+            return EnquiryModels;
+
+        }
+
+        public List<FollowUpModel> GetStudentDetailsForFollowUp()
+        {
+            List<FollowUpModel> EnquiryModels = new List<FollowUpModel>();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetStudentDetailsForFollowUp";
+
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                    param.Value = Id;
+
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            EnquiryModels.Add(
+                                new FollowUpModel
+                                {
+
+                                    Id = Convert.ToInt32(dr["Id"].ToString()),
+                                    StudentName = dr["StudentName"].ToString(),
+                                    FatherName = dr["FatherName"].ToString(),
+                                    PhoneNo = dr["PhoneNo"].ToString(),
+                                    MotherName = dr["MotherName"].ToString(),
+                                    EmailId = dr["EmailId"].ToString(),
+                                    ClassName = dr["ClassName"].ToString(),
+
                                 }
                                 );
                         }
