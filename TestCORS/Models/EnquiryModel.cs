@@ -196,6 +196,7 @@ namespace PreSchoolAPI.Models
         public string MotherName { get; set; }
         public string PhoneNo2 { get; set; }
         public string ClassName { get; set; }
+        public int UserId { get; set; }
 
 
         public string AddStudentFollowUp()
@@ -220,6 +221,8 @@ namespace PreSchoolAPI.Models
                         .Value = Reminder;
                     oCommand.Parameters.Add(new SqlParameter("@Comment", SqlDbType.VarChar))
                         .Value = Comment;
+                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.VarChar))
+                        .Value = UserId;
 
 
 
@@ -290,6 +293,47 @@ namespace PreSchoolAPI.Models
 
         }
 
+        public List<FollowUpModel> GetStudentFollowUpList()
+        {
+            List<FollowUpModel> EnquiryModels = new List<FollowUpModel>();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetStudentFollowUpList";
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            EnquiryModels.Add(
+                                new FollowUpModel
+                                {
+
+                                    Id = Convert.ToInt32(dr["Id"].ToString()),
+                                    StudentName = dr["StudentName"].ToString(),
+                                    FatherName = dr["FatherName"].ToString(),
+                                    ClassName = dr["ClassName"].ToString(),
+                                    CallStatus = dr["CallStatus"].ToString(),
+                                    Reminder = dr["Reminder"].ToString()
+                                }
+                                );
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                        // Action after the exception is caught  
+                    }
+                }
+            }
+            return EnquiryModels;
+
+        }
         public List<FollowUpModel> GetStudentDetailsForFollowUp()
         {
             List<FollowUpModel> EnquiryModels = new List<FollowUpModel>();

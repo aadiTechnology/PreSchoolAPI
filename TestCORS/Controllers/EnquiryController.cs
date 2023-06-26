@@ -39,6 +39,7 @@ namespace TestCORS.Controllers
         {
             return followUpModel.AddStudentFollowUp();
         }
+
         [HttpPost]
         [Route("GetStudentDetailsForFollowUp")]
         public List<FollowUpModel> GetStudentDetailsForFollowUp([FromBody] FollowUpModel followUpModel)
@@ -47,11 +48,11 @@ namespace TestCORS.Controllers
         }
 
         [HttpPost]
-        [Route("GetStudentFollowUp")]
-        public List<FollowUpModel> GetStudentFollowUp([FromBody] FollowUpModel followUpModel)
+        [Route("GetStudentFollowUpList")]
+        public List<FollowUpModel> GetStudentFollowUpList()
         {
-
-            return followUpModel.GetStudentFollowUp();
+            FollowUpModel followUpModel = new FollowUpModel();
+            return followUpModel.GetStudentFollowUpList();
         }
 
 
