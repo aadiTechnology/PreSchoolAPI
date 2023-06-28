@@ -456,13 +456,13 @@ namespace PreSchoolAPI.Models
                         param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
                         param.Value = Id;
                         oCommand.ExecuteNonQuery();
-                        DeleteStudentDetailsReturn = "Data will be Deleted   Successfully";
+                        DeleteStudentDetailsReturn = " Student Details Deleted Successfully";
                     }
                 }
                 catch (Exception e)
                 {
                     oConnection.Close();
-                    DeleteStudentDetailsReturn = "Failed  ";
+                    DeleteStudentDetailsReturn = "Failed to Delete Student Details  ";
 
                 }
             }
