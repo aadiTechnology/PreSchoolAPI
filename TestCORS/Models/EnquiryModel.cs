@@ -197,8 +197,11 @@ namespace PreSchoolAPI.Models
         public string PhoneNo2 { get; set; }
         public string ClassName { get; set; }
         public int UserId { get; set; }
+        public string BirthDate { get; set; }
+        public int Age { get; set; }
+        public string SocietyName { get; set; }
 
-
+        public string StudentAddress { get; set; }
         public string AddStudentFollowUp()
 
         {
@@ -382,8 +385,64 @@ namespace PreSchoolAPI.Models
             return EnquiryModels;
 
         }
+    
+    public FollowUpModel EditStudentEnquirydetails()
+    {
+        FollowUpModel EditDetails = new FollowUpModel();
 
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetStudentEnquiryListForEdit";
+
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                param.Value = Id;
+
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        EditDetails = new FollowUpModel
+                        {
+
+
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            StudentName = dr["StudentName"].ToString(),
+                            BirthDate = dr["BirthDate"].ToString(),
+                            Age = Convert.ToInt32(dr["Age"].ToString()),
+                            FatherName = dr["FatherName"].ToString(),
+                            PhoneNo = dr["PhoneNo"].ToString(),
+                            MotherName = dr["MotherName"].ToString(),
+                            PhoneNo2 = dr["PhoneNo2"].ToString(),
+                            SocietyName = dr["SocietyName"].ToString(),
+                            StudentAddress = dr["StudentAddress"].ToString(),
+                            EmailId = dr["EmailId"].ToString(),
+
+                        };
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                }
+            }
+
+        }
+        return EditDetails;
     }
+
+
+}
+    
+
+}
+
 
     public class AdmissionDetails
     {
@@ -1594,4 +1653,3 @@ namespace PreSchoolAPI.Models
 
 
 
-}

@@ -280,6 +280,13 @@ namespace TestCORS.Controllers
             return classModel.GetSubjectNameDropdown();
         }
 
+        [HttpPost]
+        [Route("EditStudentEnquirydetails")]
+        public FollowUpModel EditStudentEnquirydetails([FromBody] FollowUpModel followmodel)
+        {
+            return followmodel.EditStudentEnquirydetails();
+        }
+
     }
 
 }
