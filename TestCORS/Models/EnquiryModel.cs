@@ -322,6 +322,7 @@ namespace PreSchoolAPI.Models
                                     FatherName = dr["FatherName"].ToString(),
                                     ClassName = dr["ClassName"].ToString(),
                                     CallStatus = dr["CallStatus"].ToString(),
+                                    Comment=dr["Comment"].ToString(),
                                     Reminder = dr["Reminder"].ToString()
                                 }
                                 );
