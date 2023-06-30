@@ -320,7 +320,6 @@ namespace PreSchoolAPI.Models
                                     Id = Convert.ToInt32(dr["Id"].ToString()),
                                     StudentName = dr["StudentName"].ToString(),
                                     FatherName = dr["FatherName"].ToString(),
-                                    ClassName = dr["ClassName"].ToString(),
                                     CallStatus = dr["CallStatus"].ToString(),
                                     Comment=dr["Comment"].ToString(),
                                     Reminder = dr["Reminder"].ToString()
