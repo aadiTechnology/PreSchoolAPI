@@ -568,14 +568,11 @@ namespace PreSchoolAPI.Models
         public string Qualification { get; set; }
         public string Address { get; set; }
         public string Phoneno { get; set; }
-        public string Email { get; set; }
+        public string EmailId { get; set; }
         public string Experience { get; set; }
         public string JoiningDate { get; set; }
-
-        public int UserId { get; set; }
-        public string ClassId { get; set; }
-
-        public int TeacherId { get; set; }
+         public int UserId { get; set; }
+      
 
         public string AddTeacherDetails()
         {
@@ -599,8 +596,8 @@ namespace PreSchoolAPI.Models
                         .Value = Address;
                     oCommand.Parameters.Add(new SqlParameter("@Phoneno", SqlDbType.VarChar))
                         .Value = Phoneno;
-                    oCommand.Parameters.Add(new SqlParameter("@Email", SqlDbType.VarChar))
-                        .Value = Email;
+                    oCommand.Parameters.Add(new SqlParameter("@EmailId", SqlDbType.VarChar))
+                        .Value = EmailId;
                     oCommand.Parameters.Add(new SqlParameter("@Experience", SqlDbType.VarChar))
                         .Value = Experience;
                     oCommand.Parameters.Add(new SqlParameter("@JoiningDate", SqlDbType.VarChar))
@@ -651,7 +648,7 @@ namespace PreSchoolAPI.Models
                                     Qualification = dr["Qualification"].ToString(),
                                     Address = dr["Address"].ToString(),
                                     Phoneno = dr["Phoneno"].ToString(),
-                                    Email = dr["Email"].ToString(),
+                                    EmailId = dr["EmailId"].ToString(),
                                     Experience = dr["Experience"].ToString()
                                 });
                         }
@@ -692,7 +689,7 @@ namespace PreSchoolAPI.Models
                                     Qualification = dr["Qualification"].ToString(),
                                     Address = dr["Address"].ToString(),
                                     Phoneno = dr["Phoneno"].ToString(),
-                                    Email = dr["Email"].ToString(),
+                                    EmailId = dr["EmailId"].ToString(),
                                     Experience = dr["Experience"].ToString()
                                 });
                         }
