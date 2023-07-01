@@ -174,7 +174,7 @@ namespace TestCORS.Controllers
             return homeworkDetails.DeleteHomeworkDetails();
         }
 
-       
+
 
 
         [HttpPost]
@@ -268,7 +268,7 @@ namespace TestCORS.Controllers
         [Route("AssignClassToTeacher")]
         public string AssignClassToTeacher([FromBody] ClassModel classModel)
         {
-            
+
             return classModel.AssignClassToTeacher();
         }
 
@@ -288,6 +288,22 @@ namespace TestCORS.Controllers
             return followmodel.EditStudentEnquirydetails();
         }
 
+     [HttpPost]
+     [Route("DeleteStudentDetails")]
+     public  string DeleteStudentDetails([FromBody] FollowUpModel followmodel)
+        {
+            return followmodel.DeleteStudentDetails();
+        }
+
+        [HttpPost]
+        [Route("DeleteFollowUpList")]
+        public string DeleteFollowUpList([FromBody] FollowUpModel followmodel)
+        {
+            return followmodel.DeleteFollowUpList();
+        }
     }
 
 }
+
+
+

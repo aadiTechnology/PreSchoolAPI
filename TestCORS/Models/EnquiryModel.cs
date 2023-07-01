@@ -320,8 +320,8 @@ namespace PreSchoolAPI.Models
                                     Id = Convert.ToInt32(dr["Id"].ToString()),
                                     StudentName = dr["StudentName"].ToString(),
                                     FatherName = dr["FatherName"].ToString(),
-                                    ClassName = dr["ClassName"].ToString(),
                                     CallStatus = dr["CallStatus"].ToString(),
+                                    Comment=dr["Comment"].ToString(),
                                     Reminder = dr["Reminder"].ToString()
                                 }
                                 );
@@ -385,60 +385,123 @@ namespace PreSchoolAPI.Models
             return EnquiryModels;
 
         }
-    
-    public FollowUpModel EditStudentEnquirydetails()
-    {
-        FollowUpModel EditDetails = new FollowUpModel();
 
-        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        public FollowUpModel EditStudentEnquirydetails()
         {
-            oConnection.Open();
-            using (SqlCommand oCommand = oConnection.CreateCommand())
+            FollowUpModel EditDetails = new FollowUpModel();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
             {
-                oCommand.CommandType = CommandType.StoredProcedure;
-                oCommand.CommandText = "USP_GetStudentEnquiryListForEdit";
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_GetStudentEnquiryListForEdit";
 
-                SqlParameter param;
-                param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
-                param.Value = Id;
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                    param.Value = Id;
 
+                    try
+                    {
+                        SqlDataReader dr = oCommand.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            EditDetails = new FollowUpModel
+                            {
+
+
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                StudentName = dr["StudentName"].ToString(),
+                                BirthDate = dr["BirthDate"].ToString(),
+                                Age = Convert.ToInt32(dr["Age"].ToString()),
+                                FatherName = dr["FatherName"].ToString(),
+                                PhoneNo = dr["PhoneNo"].ToString(),
+                                MotherName = dr["MotherName"].ToString(),
+                                PhoneNo2 = dr["PhoneNo2"].ToString(),
+                                SocietyName = dr["SocietyName"].ToString(),
+                                StudentAddress = dr["StudentAddress"].ToString(),
+                                EmailId = dr["EmailId"].ToString(),
+
+                            };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        oConnection.Close();
+                    }
+                }
+
+            }
+            return EditDetails;
+        }
+
+
+        public string DeleteStudentDetails()
+        {
+            string DeleteStudentDetailsReturn = "";
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
                 try
                 {
-                    SqlDataReader dr = oCommand.ExecuteReader();
-                    while (dr.Read())
+                    oConnection.Open();
+                    using (SqlCommand oCommand = oConnection.CreateCommand())
                     {
-                        EditDetails = new FollowUpModel
-                        {
+                        oCommand.CommandType = CommandType.StoredProcedure;
+                        oCommand.CommandText = "USP_GetDeleteStudentEnquiry";
 
-
-                            Id = Convert.ToInt32(dr["Id"].ToString()),
-                            StudentName = dr["StudentName"].ToString(),
-                            BirthDate = dr["BirthDate"].ToString(),
-                            Age = Convert.ToInt32(dr["Age"].ToString()),
-                            FatherName = dr["FatherName"].ToString(),
-                            PhoneNo = dr["PhoneNo"].ToString(),
-                            MotherName = dr["MotherName"].ToString(),
-                            PhoneNo2 = dr["PhoneNo2"].ToString(),
-                            SocietyName = dr["SocietyName"].ToString(),
-                            StudentAddress = dr["StudentAddress"].ToString(),
-                            EmailId = dr["EmailId"].ToString(),
-
-                        };
+                        SqlParameter param;
+                        param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                        param.Value = Id;
+                        oCommand.ExecuteNonQuery();
+                        DeleteStudentDetailsReturn = " Student Details Deleted Successfully";
                     }
                 }
                 catch (Exception e)
                 {
                     oConnection.Close();
+                    DeleteStudentDetailsReturn = "Failed to Delete Student Details  ";
+
                 }
             }
-
+            return DeleteStudentDetailsReturn;
         }
-        return EditDetails;
+
+        public string DeleteFollowUpList()
+        {
+            string DeleteFollowUpReturn = "";
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    oConnection.Open();
+                    using (SqlCommand oCommand = oConnection.CreateCommand())
+                    {
+                        oCommand.CommandType = CommandType.StoredProcedure;
+                        oCommand.CommandText = "USP_DeleteFollowUpList";
+
+                        SqlParameter param;
+                        param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                        param.Value = Id;
+                        oCommand.ExecuteNonQuery();
+                        DeleteFollowUpReturn = " FollowUp List Deleted Successfully";
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    DeleteFollowUpReturn = "Failed to  Delete  FollowUp List  ";
+
+                }
+            }
+            return DeleteFollowUpReturn;
+        }
+
+
     }
-
-
-}
     
 
 }
