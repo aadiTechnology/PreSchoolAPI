@@ -469,6 +469,37 @@ namespace PreSchoolAPI.Models
             return DeleteStudentDetailsReturn;
         }
 
+        public string DeleteFollowUpList()
+        {
+            string DeleteFollowUpReturn = "";
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    oConnection.Open();
+                    using (SqlCommand oCommand = oConnection.CreateCommand())
+                    {
+                        oCommand.CommandType = CommandType.StoredProcedure;
+                        oCommand.CommandText = "USP_DeleteFollowUpList";
+
+                        SqlParameter param;
+                        param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                        param.Value = Id;
+                        oCommand.ExecuteNonQuery();
+                        DeleteFollowUpReturn = " FollowUp List Deleted Successfully";
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    DeleteFollowUpReturn = "Failed to  Delete  FollowUp List  ";
+
+                }
+            }
+            return DeleteFollowUpReturn;
+        }
+
 
     }
     

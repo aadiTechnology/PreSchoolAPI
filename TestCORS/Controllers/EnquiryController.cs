@@ -293,6 +293,13 @@ namespace TestCORS.Controllers
         {
             return followmodel.DeleteStudentDetails();
         }
+
+        [HttpPost]
+        [Route("DeleteFollowUpList")]
+        public string DeleteFollowUpList([FromBody] FollowUpModel followmodel)
+        {
+            return followmodel.DeleteFollowUpList();
+        }
     }
 
 }
