@@ -6,6 +6,7 @@ using System.Web;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace PreSchoolAPI.Models
 {
@@ -809,16 +810,19 @@ namespace PreSchoolAPI.Models
     public class HomeworkDetailsModel
     {
         public int Id { get; set; }
+        public int ClassDivisionId { get; set; }
         public int ClassId { get; set; }
         public int SubjectId { get; set; }
         public string SubjectDescription { get; set; }
         public string AssignDate { get; set; }
         public int AcademicId { get; set; }
         public string Attachment { get; set; }
+        public string AttachmentName { get; set; }
         public int UserId { get; set; }
         public int UserRoleId { get; set; }
         
         public string ClassName { get; set; }
+        public string DivisionName { get; set; }
         public string SubjectName { get; set; }
         public bool IsSubmited { get; set; }
         public string StartDate { get; set; }
@@ -831,8 +835,14 @@ namespace PreSchoolAPI.Models
         public string AddHomeworkDetails()
 
         {
-
-            string addhomeworkdetailsReturn = "";
+        
+        string sFileName = AttachmentName.Insert(AttachmentName.LastIndexOf("."), DateTime.Now.ToString("$yyyyMMddHHmmss")).Replace(" ", "_");
+        string sFilePath = ConfigurationManager.AppSettings["DoccumentPath"];
+        byte[] FileData = new byte[Attachment.Length];
+        FileStream fileStream = File.Create((sFilePath + sFileName), (int)FileData.Length);
+        fileStream.Write(FileData, 0, FileData.Length);
+        fileStream.Close();
+        string addhomeworkdetailsReturn = "";
             string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connetionString))
             {
@@ -845,8 +855,8 @@ namespace PreSchoolAPI.Models
 
                     oCommand.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int))
                         .Value = Id;
-                    oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
-                        .Value = ClassId;
+                    oCommand.Parameters.Add(new SqlParameter("@ClassDivisionId", SqlDbType.Int))
+                        .Value = ClassDivisionId;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectId", SqlDbType.Int))
                       .Value = SubjectId;
                     oCommand.Parameters.Add(new SqlParameter("@SubjectDescription", SqlDbType.VarChar))
@@ -855,9 +865,11 @@ namespace PreSchoolAPI.Models
                        .Value = AssignDate;
                     oCommand.Parameters.Add(new SqlParameter("@AcademicId", SqlDbType.Int))
                        .Value = AcademicId;
-                    oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
-                       .Value = Attachment;
-                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
+                   .Value = Attachment;
+                oCommand.Parameters.Add(new SqlParameter("@AttachmentName", SqlDbType.VarChar))
+                   .Value = AttachmentName;
+                oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
                        .Value = UserId;
 
 
@@ -939,7 +951,8 @@ namespace PreSchoolAPI.Models
                                 new HomeworkDetailsModel
                                 {
                                     Id = Convert.ToInt32(dr["Id"].ToString()),
-                                    ClassName = dr["ClassName"].ToString(),
+                                    ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
+                                    ClassName = dr["DivisionName"].ToString(),
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
@@ -971,9 +984,11 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_GetDatewiseHomeworkDetails";
                     SqlParameter param;
-                    param = oCommand.Parameters.Add("@StartDate", SqlDbType.VarChar);
-                    param.Value = StartDate;
-                    param = oCommand.Parameters.Add("@EndDate", SqlDbType.VarChar);
+                param = oCommand.Parameters.Add("@ClassDivisionId", SqlDbType.Int);
+                param.Value = ClassDivisionId;
+                param = oCommand.Parameters.Add("@StartDate", SqlDbType.VarChar);
+                param.Value = StartDate;
+                param = oCommand.Parameters.Add("@EndDate", SqlDbType.VarChar);
                     param.Value = EndDate;
                     try
                     {
@@ -1023,7 +1038,8 @@ namespace PreSchoolAPI.Models
                                 new HomeworkDetailsModel
                                 {
                                     Id = Convert.ToInt32(dr["Id"].ToString()),
-                                    ClassName = dr["ClassName"].ToString(),
+                                    ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
+                                    DivisionName = dr["DivisionName"].ToString(),
                                     SubjectName = dr["SubjectName"].ToString(),
                                     SubjectDescription = dr["SubjectDescription"].ToString(),
                                     AssignDate = dr["AssignDate"].ToString(),
@@ -1054,8 +1070,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_GetViewHomeWork";
                     SqlParameter param;
-                    param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
-                    param.Value = AssignDate;
+                    param = oCommand.Parameters.Add("@Id", SqlDbType.VarChar);
+                    param.Value = Id;
                     try
                     {
                         SqlDataReader dr = oCommand.ExecuteReader();
@@ -1092,6 +1108,8 @@ namespace PreSchoolAPI.Models
                     oCommand.CommandType = CommandType.StoredProcedure;
                     oCommand.CommandText = "USP_GetDateForLegend";
                     SqlParameter param;
+                    param = oCommand.Parameters.Add("@ClassDivisionId", SqlDbType.Int);
+                    param.Value = ClassDivisionId;
                     param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
                     param.Value = AssignDate;
                     try
@@ -1102,6 +1120,7 @@ namespace PreSchoolAPI.Models
 
                             viewhomeworkModel.Add( new HomeworkDetailsModel
                             {
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
                                 AssignDate = dr["AssignDate"].ToString(),
                                 SubjectName = dr["SubjectName"].ToString()
                                 
@@ -1144,7 +1163,8 @@ namespace PreSchoolAPI.Models
                             HomeworkDetails = new HomeworkDetailsModel
                             {
                                 Id = Convert.ToInt32(dr["Id"].ToString()),
-                                ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                                ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
+                                SubjectId = Convert.ToInt32(dr["SubjectId"].ToString()),
                                 ClassName = dr["ClassName"].ToString(),
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
@@ -1547,6 +1567,9 @@ namespace PreSchoolAPI.Models
         public string EmailIdOrPhone { get; set; }
 
         public int UserId { get; set; }
+        public int UserRoleId { get; set; }
+        public int ClassDivisionId { get; set; }
+        public int ClassId { get; set; }
         public UserLoginModel UserLogin()
         {
 
@@ -1573,7 +1596,13 @@ namespace PreSchoolAPI.Models
                         {
                             userLogin = new UserLoginModel
                             {
-                                UserType = dr["UserType"].ToString()
+                                UserId = Convert.ToInt32(dr["UserId"].ToString()),
+                                UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString()),
+                                ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                                ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
+                                EmailId = dr["EmailId"].ToString(),
+                                PhoneNo = dr["PhoneNo"].ToString(),
+                                BirthDate = dr["BirthDate"].ToString(),
                             };
                         }
 
