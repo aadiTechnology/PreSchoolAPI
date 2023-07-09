@@ -838,10 +838,12 @@ namespace PreSchoolAPI.Models
         
         string sFileName = AttachmentName.Insert(AttachmentName.LastIndexOf("."), DateTime.Now.ToString("$yyyyMMddHHmmss")).Replace(" ", "_");
         string sFilePath = ConfigurationManager.AppSettings["DoccumentPath"];
-        byte[] FileData = new byte[Attachment.Length];
+        byte[] FileData = System.Convert.FromBase64String(Attachment); 
         FileStream fileStream = File.Create((sFilePath + sFileName), (int)FileData.Length);
         fileStream.Write(FileData, 0, FileData.Length);
         fileStream.Close();
+        Attachment = sFileName;
+
         string addhomeworkdetailsReturn = "";
             string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connetionString))
