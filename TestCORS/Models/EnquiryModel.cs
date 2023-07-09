@@ -1561,14 +1561,16 @@ namespace PreSchoolAPI.Models
 
     public class UserLoginModel
     {
+        public string UserName { get; set; }
         public string EmailId { get; set; }
         public string PhoneNo { get; set; }
         public string LoginPassword { get; set; }
         public string UserType { get; set; }
         public string BirthDate { get; set; }
         public string EmailIdOrPhone { get; set; }
+    public string ClassDivisionName { get; set; }
 
-        public int UserId { get; set; }
+    public int UserId { get; set; }
         public int UserRoleId { get; set; }
         public int ClassDivisionId { get; set; }
         public int ClassId { get; set; }
@@ -1598,6 +1600,8 @@ namespace PreSchoolAPI.Models
                         {
                             userLogin = new UserLoginModel
                             {
+                                UserName = dr["UserName"].ToString(),
+                                ClassDivisionName = dr["ClassDivisionName"].ToString(),
                                 UserId = Convert.ToInt32(dr["UserId"].ToString()),
                                 UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString()),
                                 ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
