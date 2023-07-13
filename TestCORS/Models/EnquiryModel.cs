@@ -816,6 +816,7 @@ namespace PreSchoolAPI.Models
         public string SubjectDescription { get; set; }
         public string AssignDate { get; set; }
         public int AcademicId { get; set; }
+        public string BinaryData { get; set; }
         public string Attachment { get; set; }
         public string AttachmentName { get; set; }
         public int UserId { get; set; }
@@ -837,15 +838,17 @@ namespace PreSchoolAPI.Models
         {
         if (!string.IsNullOrEmpty(AttachmentName))
         {
-            string sFileName = AttachmentName.Insert(AttachmentName.LastIndexOf("."), DateTime.Now.ToString("$yyyyMMddHHmmss")).Replace(" ", "_");
-            string sFilePath = ConfigurationManager.AppSettings["DoccumentPath"];
-            byte[] FileData = System.Convert.FromBase64String(Attachment);
-            FileStream fileStream = File.Create((sFilePath + sFileName), (int)FileData.Length);
-            fileStream.Write(FileData, 0, FileData.Length);
-            fileStream.Close();
-            Attachment = sFileName;
+            if (!string.IsNullOrEmpty(BinaryData))
+            {
+                string sFileName = AttachmentName.Insert(AttachmentName.LastIndexOf("."), DateTime.Now.ToString("$yyyyMMddHHmmss")).Replace(" ", "_");
+                string sFilePath = ConfigurationManager.AppSettings["DoccumentPath"];
+                byte[] FileData = System.Convert.FromBase64String(BinaryData);
+                FileStream fileStream = File.Create((sFilePath + sFileName), (int)FileData.Length);
+                fileStream.Write(FileData, 0, FileData.Length);
+                fileStream.Close();
+                Attachment = sFileName;
+            }
         }
-
         string addhomeworkdetailsReturn = "";
             string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connetionString))
@@ -1173,7 +1176,8 @@ namespace PreSchoolAPI.Models
                                 SubjectName = dr["SubjectName"].ToString(),
                                 SubjectDescription = dr["SubjectDescription"].ToString(),
                                 AssignDate = dr["AssignDate"].ToString(),
-                                Attachment = dr["Attachment"].ToString()
+                                Attachment = dr["Attachment"].ToString(),
+                                AttachmentName = dr["AttachmentName"].ToString()
                             };
                         }
                     }
