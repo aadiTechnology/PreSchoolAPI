@@ -1570,8 +1570,10 @@ namespace PreSchoolAPI.Models
         public string UserName { get; set; }
         public string EmailId { get; set; }
         public string PhoneNo { get; set; }
-        public string LoginPassword { get; set; }
-        public string UserType { get; set; }
+    public string LoginPassword { get; set; }
+    public string OldPassword { get; set; }
+    public string NewPassword { get; set; }
+    public string UserType { get; set; }
         public string BirthDate { get; set; }
         public string EmailIdOrPhone { get; set; }
     public string ClassDivisionName { get; set; }
@@ -1670,7 +1672,50 @@ namespace PreSchoolAPI.Models
             return userModel;
         }
 
-        public string AddUserLoginInfo()
+    public string ChangePassword()
+    {
+        string returnVal = string.Empty;
+        UserLoginModel userModel = new UserLoginModel();
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_ChangePassword";
+
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@UserId", SqlDbType.VarChar);
+                param.Value = UserId;
+                param = oCommand.Parameters.Add("@OldPassword", SqlDbType.VarChar);
+                param.Value = OldPassword;
+                param = oCommand.Parameters.Add("@NewPassword", SqlDbType.VarChar);
+                param.Value = NewPassword;
+
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        string Result = dr["Result"].ToString();
+                        if(Result=="1") 
+                            returnVal = "Password Changed Successfully!";
+                        else
+                            returnVal = "Incorrect Old Password!";
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
+            }
+        }
+        return returnVal;
+    }
+    public string AddUserLoginInfo()
         {
             string AddPhotoAlbumReturn = "";
             string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;

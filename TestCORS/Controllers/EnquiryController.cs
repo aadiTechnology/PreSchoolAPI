@@ -255,6 +255,13 @@ namespace TestCORS.Controllers
             return userLoginModel.ForgotPassword();
         }
 
+        [HttpPost]
+        [Route("ChangePassword")]
+        public string ChangePassword([FromBody] UserLoginModel userLoginModel)
+        {
+            return userLoginModel.ChangePassword();
+        }
+
 
         [HttpPost]
         [Route("GetClassNameList")]
