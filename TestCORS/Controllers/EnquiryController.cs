@@ -137,9 +137,8 @@ namespace TestCORS.Controllers
 
         [HttpPost]
         [Route("GetHomeworkDetailsList")]
-        public List<HomeworkDetailsModel> GetHomeworkDetailsList()
+        public List<HomeworkDetailsModel> GetHomeworkDetailsList([FromBody] HomeworkDetailsModel homeworkDetails)
         {
-            HomeworkDetailsModel homeworkDetails = new HomeworkDetailsModel();
             return homeworkDetails.GetHomeworkDetailsList();
         }
 

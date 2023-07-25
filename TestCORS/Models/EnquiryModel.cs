@@ -1024,46 +1024,49 @@ namespace PreSchoolAPI.Models
             return homeworkdetailsModel;
         }
 
-        public List<HomeworkDetailsModel> GetHomeworkDetailsList()
+    public List<HomeworkDetailsModel> GetHomeworkDetailsList()
 
+    {
+        List<HomeworkDetailsModel> homeworkdetailsModel = new List<HomeworkDetailsModel>();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionstring))
         {
-            List<HomeworkDetailsModel> homeworkdetailsModel = new List<HomeworkDetailsModel>();
-            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionstring))
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
             {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetHomeworkList";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@ClassDivisionId", SqlDbType.Int);
+                param.Value = ClassDivisionId;
+                try
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetHomeworkList";
-                    try
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
                     {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            homeworkdetailsModel.Add(
-                                new HomeworkDetailsModel
-                                {
-                                    Id = Convert.ToInt32(dr["Id"].ToString()),
-                                    ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
-                                    DivisionName = dr["DivisionName"].ToString(),
-                                    SubjectName = dr["SubjectName"].ToString(),
-                                    SubjectDescription = dr["SubjectDescription"].ToString(),
-                                    AssignDate = dr["AssignDate"].ToString(),
-                                    Attachment = dr["Attachment"].ToString(),
-                                    IsSubmited = Convert.ToBoolean(dr["IsSubmited"].ToString())
-                                });
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-
+                        homeworkdetailsModel.Add(
+                            new HomeworkDetailsModel
+                            {
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
+                                DivisionName = dr["DivisionName"].ToString(),
+                                SubjectName = dr["SubjectName"].ToString(),
+                                SubjectDescription = dr["SubjectDescription"].ToString(),
+                                AssignDate = dr["AssignDate"].ToString(),
+                                Attachment = dr["Attachment"].ToString(),
+                                IsSubmited = Convert.ToBoolean(dr["IsSubmited"].ToString())
+                            });
                     }
                 }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
             }
-            return homeworkdetailsModel;
         }
+        return homeworkdetailsModel;
+    }
         public List<HomeworkDetailsModel> GetViewHomeWorkList()
 
         {
