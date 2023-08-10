@@ -1568,112 +1568,113 @@ namespace PreSchoolAPI.Models
         }
     }
 
-    public class UserLoginModel
-    {
-        public string UserName { get; set; }
-        public string EmailId { get; set; }
-        public string PhoneNo { get; set; }
+public class UserLoginModel
+{
+     public string UserName { get; set; }
+    public string EmailId { get; set; }
+    public string PhoneNo { get; set; }
     public string LoginPassword { get; set; }
     public string OldPassword { get; set; }
     public string NewPassword { get; set; }
     public string UserType { get; set; }
-        public string BirthDate { get; set; }
-        public string EmailIdOrPhone { get; set; }
+    public string BirthDate { get; set; }
+    public string EmailIdOrPhone { get; set; }
     public string ClassDivisionName { get; set; }
 
     public int UserId { get; set; }
-        public int UserRoleId { get; set; }
-        public int ClassDivisionId { get; set; }
-        public int ClassId { get; set; }
-        public UserLoginModel UserLogin()
+    public int UserRoleId { get; set; }
+    public int ClassDivisionId { get; set; }
+    public int ClassId { get; set; }
+    public UserLoginModel UserLogin()
+    {
+
+
+        UserLoginModel userLogin = new UserLoginModel();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oconnection = new SqlConnection(connectionstring))
         {
-
-
-            UserLoginModel userLogin = new UserLoginModel();
-            string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oconnection = new SqlConnection(connectionstring))
+            oconnection.Open();
+            using (SqlCommand oCommand = oconnection.CreateCommand())
             {
-                oconnection.Open();
-                using (SqlCommand oCommand = oconnection.CreateCommand())
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetLoginType";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@EmailIdOrPhone", SqlDbType.VarChar);
+                param.Value = EmailIdOrPhone;
+                param = oCommand.Parameters.Add("@LoginPassword", SqlDbType.VarChar);
+                param.Value = LoginPassword;
+
+                try
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_GetLoginType";
-                    SqlParameter param;
-                    param = oCommand.Parameters.Add("@EmailIdOrPhone", SqlDbType.VarChar);
-                    param.Value = EmailIdOrPhone;
-                    param = oCommand.Parameters.Add("@LoginPassword", SqlDbType.VarChar);
-                    param.Value = LoginPassword;
-
-                    try
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
                     {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
+                        userLogin = new UserLoginModel
                         {
-                            userLogin = new UserLoginModel
-                            {
-                                UserName = dr["UserName"].ToString(),
-                                ClassDivisionName = dr["ClassDivisionName"].ToString(),
-                                UserId = Convert.ToInt32(dr["UserId"].ToString()),
-                                UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString()),
-                                ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
-                                ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
-                                EmailId = dr["EmailId"].ToString(),
-                                PhoneNo = dr["PhoneNo"].ToString(),
-                                BirthDate = dr["BirthDate"].ToString(),
-                            };
-                        }
+                            UserName = dr["UserName"].ToString(),
+                            ClassDivisionName = dr["ClassDivisionName"].ToString(),
+                            UserId = Convert.ToInt32(dr["UserId"].ToString()),
+                            UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString()),
+                            ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                            ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
+                            EmailId = dr["EmailId"].ToString(),
+                            PhoneNo = dr["PhoneNo"].ToString(),
+                            BirthDate = dr["BirthDate"].ToString(),
+                        };
+                    }
 
-                    }
-                    catch (Exception e)
-                    {
-                        oconnection.Close();
-                    }
+                }
+                catch (Exception e)
+                {
+                    oconnection.Close();
                 }
             }
-
-            return userLogin;
         }
-        public UserLoginModel ForgotPassword()
+
+        return userLogin;
+    }
+
+    public UserLoginModel ForgotPassword()
+    {
+
+        UserLoginModel userModel = new UserLoginModel();
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
         {
-
-            UserLoginModel userModel = new UserLoginModel();
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connectionString))
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
             {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_ForgotPassword";
+
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@EmailId", SqlDbType.VarChar);
+                param.Value = EmailId;
+                param = oCommand.Parameters.Add("@PhoneNo", SqlDbType.VarChar);
+                param.Value = PhoneNo;
+                param = oCommand.Parameters.Add("@BirthDate", SqlDbType.VarChar);
+                param.Value = BirthDate;
+
+                try
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_ForgotPassword";
-
-                    SqlParameter param;
-                    param = oCommand.Parameters.Add("@EmailId", SqlDbType.VarChar);
-                    param.Value = EmailId;
-                    param = oCommand.Parameters.Add("@PhoneNo", SqlDbType.VarChar);
-                    param.Value = PhoneNo;
-                    param = oCommand.Parameters.Add("@BirthDate", SqlDbType.VarChar);
-                    param.Value = BirthDate;
-
-                    try
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
                     {
-                        SqlDataReader dr = oCommand.ExecuteReader();
-                        while (dr.Read())
+                        userModel = new UserLoginModel
                         {
-                            userModel = new UserLoginModel
-                            {
-                                LoginPassword = dr["LoginPassword"].ToString()
-                            };
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-
+                            LoginPassword = dr["LoginPassword"].ToString()
+                        };
                     }
                 }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
             }
-            return userModel;
         }
+        return userModel;
+    }
 
     public string ChangePassword()
     {
@@ -1702,7 +1703,7 @@ namespace PreSchoolAPI.Models
                     while (dr.Read())
                     {
                         string Result = dr["Result"].ToString();
-                        if(Result=="1") 
+                        if (Result == "1")
                             returnVal = "Password Changed Successfully!";
                         else
                             returnVal = "Incorrect Old Password!";
@@ -1719,44 +1720,133 @@ namespace PreSchoolAPI.Models
         return returnVal;
     }
     public string AddUserLoginInfo()
+    {
+        string AddPhotoAlbumReturn = "";
+        string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connetionString))
         {
-            string AddPhotoAlbumReturn = "";
-            string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection oConnection = new SqlConnection(connetionString))
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
             {
-                oConnection.Open();
-                using (SqlCommand oCommand = oConnection.CreateCommand())
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_AddUserLoginInfo";
+
+                oCommand.Parameters.Add(new SqlParameter("@EmailId", SqlDbType.VarChar))
+                .Value = EmailId;
+                oCommand.Parameters.Add(new SqlParameter("@PhoneNo", SqlDbType.VarChar))
+               .Value = PhoneNo;
+                oCommand.Parameters.Add(new SqlParameter("@BirthDate", SqlDbType.VarChar))
+               .Value = BirthDate;
+                oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                    .Value = UserId;
+
+                try
                 {
-                    oCommand.CommandType = CommandType.StoredProcedure;
-                    oCommand.CommandText = "USP_AddUserLoginInfo";
-
-                    oCommand.Parameters.Add(new SqlParameter("@EmailId", SqlDbType.VarChar))
-                    .Value = EmailId;
-                    oCommand.Parameters.Add(new SqlParameter("@PhoneNo", SqlDbType.VarChar))
-                   .Value = PhoneNo;
-                    oCommand.Parameters.Add(new SqlParameter("@BirthDate", SqlDbType.VarChar))
-                   .Value = BirthDate;
-                    oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
-                        .Value = UserId;
-
-                    try
-                    {
-                        oCommand.ExecuteNonQuery();
-                        AddPhotoAlbumReturn = "user login added";
-                    }
-                    catch (Exception e)
-                    {
-                        oConnection.Close();
-                        AddPhotoAlbumReturn = "Faild to Add user login";
-                    }
-
+                    oCommand.ExecuteNonQuery();
+                    AddPhotoAlbumReturn = "user login added";
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    AddPhotoAlbumReturn = "Faild to Add user login";
                 }
 
             }
-            return AddPhotoAlbumReturn;
 
         }
+        return AddPhotoAlbumReturn;
+
     }
+    public List<UserLoginModel> GetUsersForLogIn()
+    {
+        List<UserLoginModel> ListUsersLogInModel = new List<UserLoginModel>();
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetUsersForLogIn";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                param.Value = Id;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ListUsersLogInModel.Add(new UserLoginModel
+                        {
+                            UserId = Convert.ToInt32(dr["UserLogInId"]),
+                            UserName = dr["Name"].ToString(),
+                            UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString())
+                        }
+                        );
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                }
+            }
+
+        }
+        return ListUsersLogInModel;
+    }
+
+    public List<UserLoginModel> GetLogInByUserId()
+    {
+        List<UserLoginModel> LogInByUserIds = new List<UserLoginModel>();
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetLogInByUserId";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@UserId", SqlDbType.Int);
+                param.Value = UserId;
+                param = oCommand.Parameters.Add("@UserRoleId", SqlDbType.Int);
+                param.Value = UserRoleId;
+
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        LogInByUserIds.Add(new UserLoginModel
+                        {
+                            UserId = Convert.ToInt32(dr["UserId"].ToString()),
+                            UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString()),
+                            ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                            ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"]),
+                            UserName = dr["UserName"].ToString(),
+                            ClassDivisionName = dr["ClassDivisionName"].ToString(),
+                            EmailId = dr["EmailId"].ToString(),
+                            PhoneNo = dr["PhoneNo"].ToString(),
+                            BirthDate = dr["BirthDate"].ToString()
+                        }
+                        );
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                }
+            }
+
+        }
+        return LogInByUserIds;
+    }
+
+
+
+
 
     public class SubjectModel
     {
@@ -1799,6 +1889,4 @@ namespace PreSchoolAPI.Models
             return ClassModels;
         }
     }
-
-
-
+}

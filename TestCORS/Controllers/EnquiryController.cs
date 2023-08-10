@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using PreSchoolAPI.Models;
+using static UserLoginModel;
+
 namespace TestCORS.Controllers
 {
     public class EnquiryController : ApiController
@@ -307,9 +309,22 @@ namespace TestCORS.Controllers
         {
             return followmodel.DeleteFollowUpList();
         }
+
+
+        [HttpPost]
+        [Route("GetUsersForLogIn")]
+        public List <UserLoginModel>GetUsersForLogIn([FromBody] UserLoginModel loginmodel)
+        {
+            return loginmodel.GetUsersForLogIn();
+        }
+
+        [HttpPost]
+        [Route("GetLogInByUserId")]
+        public List<UserLoginModel> GetLogInByUserId([FromBody] UserLoginModel loginmodel)
+        {
+            return loginmodel.GetLogInByUserId();
+        }
     }
 
 }
-
-
 
