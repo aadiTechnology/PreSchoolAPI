@@ -1585,6 +1585,8 @@ public class UserLoginModel
     public int UserRoleId { get; set; }
     public int ClassDivisionId { get; set; }
     public int ClassId { get; set; }
+    public object Id { get; private set; }
+
     public UserLoginModel UserLogin()
     {
 
