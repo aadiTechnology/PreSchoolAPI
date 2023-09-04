@@ -12,21 +12,11 @@ namespace TestCORS.Controllers
     public class EnquiryController : ApiController
     {
         [HttpPost]
-        [Route("AddStudentEnquiryDetails")]
-        public string AddStudentEnquiryDetails([FromBody] EnquiryModel enquiryModel)
+        [Route("AddStudentDetails")]
+        public string AddStudentDetails([FromBody] EnquiryModel enquiryModel)
         {
-            return enquiryModel.AddStudentEnquiryDetails();
+            return enquiryModel.AddStudentDetails();
         }
-
-        [HttpPost]
-        [Route("GetStudentEnquiryDetailsList")]
-        public List<EnquiryModel> GetStudentEnquiryDetailsList()
-        {
-            EnquiryModel enquiryModel = new EnquiryModel();
-            return enquiryModel.GetStudentEnquiryDetailsList();
-        }
-
-        //get GetStudentDetails
         [HttpPost]
         [Route("GetStudentDetails")]
         public List<EnquiryModel> GetStudentDetails([FromBody] EnquiryModel enquiryModel)
@@ -34,6 +24,54 @@ namespace TestCORS.Controllers
             return enquiryModel.GetStudentDetails();
 
         }
+
+        [HttpPost]
+        [Route("GetEnquiryStudentDetails")]
+        public List<EnquiryModel> GetEnquiryStudentDetails()
+        {
+            EnquiryModel enquiryModel = new EnquiryModel();
+            return enquiryModel.GetEnquiryStudentDetails();
+        }
+        [HttpPost]
+        [Route("GetEnquiryStudentDetailsForEdit")]
+        public EnquiryModel GetEnquiryStudentDetailsForEdit([FromBody] EnquiryModel enquiryModel)
+        {
+            return enquiryModel.GetEnquiryStudentDetailsForEdit();
+        }
+        [HttpPost]
+        [Route("EditEnquiryStudentdetails")]
+        public EnquiryModel EditEnquiryStudentdetails([FromBody] EnquiryModel enquirymodel)
+        {
+            return enquirymodel.EditEnquiryStudentdetails();
+        }
+
+        [HttpPost]
+        [Route("DeleteEnquiryStudentDetails")]
+        public string DeleteEnquiryStudentDetails([FromBody] EnquiryModel enquirymodel)
+        {
+            return enquirymodel.DeleteEnquiryStudentDetails();
+        }
+        [HttpPost]
+        [Route("GetStudentDetailsList")]
+        public List<EnquiryModel> GetStudentDetailsList([FromBody] EnquiryModel enquiryModel)
+        {
+            return enquiryModel.GetStudentDetailsList();
+        }
+
+        [HttpPost]
+        [Route("DeleteStudentDetails")]
+        public string DeleteStudentDetails([FromBody] EnquiryModel enquiryModel)
+        {
+            return enquiryModel.DeleteStudentDetails();
+        }
+        //get GetStudentDetails
+        //[HttpPost]
+        //[Route("GetStudentDetails")]
+        //public List<EnquiryModel> GetStudentDetails([FromBody] EnquiryModel enquiryModel)
+        //{
+        //    return enquiryModel.GetStudentDetails();
+
+        //}
 
         [HttpPost]
         [Route("AddStudentFollowUp")]
@@ -59,10 +97,10 @@ namespace TestCORS.Controllers
 
 
         [HttpPost]
-        [Route("AdmissionConversion")]
-        public string AdmissionConversion([FromBody] AdmissionDetails admissionDetails)
+        [Route("AdmissionForm")]
+        public string AdmissionForm([FromBody] AdmissionDetails admissionDetails)
         {
-            return admissionDetails.AdmissionConversion();
+            return admissionDetails.AdmissionForm();
         }
 
 
@@ -296,12 +334,6 @@ namespace TestCORS.Controllers
             return followmodel.EditStudentEnquirydetails();
         }
 
-     [HttpPost]
-     [Route("DeleteStudentDetails")]
-     public  string DeleteStudentDetails([FromBody] FollowUpModel followmodel)
-        {
-            return followmodel.DeleteStudentDetails();
-        }
 
         [HttpPost]
         [Route("DeleteFollowUpList")]
@@ -313,7 +345,7 @@ namespace TestCORS.Controllers
 
         [HttpPost]
         [Route("GetUsersForLogIn")]
-        public List <UserLoginModel>GetUsersForLogIn([FromBody] UserLoginModel loginmodel)
+        public List<UserLoginModel> GetUsersForLogIn([FromBody] UserLoginModel loginmodel)
         {
             return loginmodel.GetUsersForLogIn();
         }
