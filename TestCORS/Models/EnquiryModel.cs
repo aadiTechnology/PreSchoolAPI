@@ -1472,6 +1472,7 @@ public class ClassModel
 {
     public int ClassId { get; set; }
     public string ClassName { get; set; }
+    public string DivisionName { get; set; }
     public string InsertBy { get; set; }
     public string TeacherId { get; set; }
     public int UserId { get; set; }
@@ -1527,6 +1528,43 @@ public class ClassModel
                         {
                             ClassId = Convert.ToInt32(dr["Id"].ToString()),
                             ClassName = dr["ClassName"].ToString(),
+                        }
+                        );
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    // Action after the exception is caught  
+                }
+            }
+        }
+        return ClassModels;
+    }
+    public List<ClassModel> GetClassDivisionList(ClassModel classModel)
+    {
+
+        List<ClassModel> ClassModels = new List<ClassModel>();
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetClassDivisionList";
+                oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
+                .Value = ClassId;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        ClassModels.Add(
+                        new ClassModel
+                        {
+                            ClassId = Convert.ToInt32(dr["Id"].ToString()),
+                            DivisionName = dr["DivisionName"].ToString(),
                         }
                         );
                     }

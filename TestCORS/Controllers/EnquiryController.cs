@@ -311,6 +311,13 @@ namespace TestCORS.Controllers
         }
 
         [HttpPost]
+        [Route("GetClassDivisionList")]
+        public List<ClassModel> GetClassDivisionList([FromBody] ClassModel classModel)
+        {
+            return classModel.GetClassDivisionList(classModel);
+        }
+
+        [HttpPost]
         [Route("AssignClassToTeacher")]
         public string AssignClassToTeacher([FromBody] ClassModel classModel)
         {
