@@ -101,9 +101,9 @@ namespace PreSchoolAPI.Models
             }
             return addStudentDetailsReturn;
         }
-        public List<EnquiryModel> GetStudentDetails()
+        public EnquiryModel GetStudentDetails()
         {
-            List<EnquiryModel> EnquiryModels = new List<EnquiryModel>();
+            EnquiryModel EnquiryModel = new EnquiryModel();
 
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection oConnection = new SqlConnection(connectionString))
@@ -123,7 +123,7 @@ namespace PreSchoolAPI.Models
                         SqlDataReader dr = oCommand.ExecuteReader();
                         while (dr.Read())
                         {
-                            EnquiryModels.Add(
+                            EnquiryModel = 
                             new EnquiryModel
                             {
 
@@ -142,8 +142,7 @@ namespace PreSchoolAPI.Models
                                 ClassDivisionId = Convert.ToInt32(dr["ClassDivisionId"].ToString()),
                                 SMS = Convert.ToBoolean(dr["SMS"].ToString()),
 
-                            }
-                            );
+                            };
                         }
                     }
                     catch (Exception e)
@@ -153,7 +152,7 @@ namespace PreSchoolAPI.Models
                     }
                 }
             }
-            return EnquiryModels;
+            return EnquiryModel;
         }
         public List<EnquiryModel> GetStudentDetailsList()
         {
