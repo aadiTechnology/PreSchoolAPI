@@ -1865,7 +1865,7 @@ public class UserLoginModel
     public int UserRoleId { get; set; }
     public int ClassDivisionId { get; set; }
     public int ClassId { get; set; }
-    public object Id { get; private set; }
+    public object Id { get; set; }
 
     public UserLoginModel UserLogin()
     {
@@ -2060,8 +2060,8 @@ public class UserLoginModel
                     {
                         ListUsersLogInModel.Add(new UserLoginModel
                         {
-                            UserId = Convert.ToInt32(dr["UserLogInId"]),
-                            UserName = dr["Name"].ToString(),
+                            UserId = Convert.ToInt32(dr["UserId"]),
+                            UserName = dr["UserName"].ToString(),
                             UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString())
                         }
                         );
@@ -2078,9 +2078,9 @@ public class UserLoginModel
         return ListUsersLogInModel;
     }
 
-    public List<UserLoginModel> GetLogInByUserId()
+    public UserLoginModel GetLogInByUserId()
     {
-        List<UserLoginModel> LogInByUserIds = new List<UserLoginModel>();
+        UserLoginModel LogInByUserIds = new UserLoginModel();
         string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         using (SqlConnection oConnection = new SqlConnection(connectionString))
         {
@@ -2100,7 +2100,7 @@ public class UserLoginModel
                     SqlDataReader dr = oCommand.ExecuteReader();
                     while (dr.Read())
                     {
-                        LogInByUserIds.Add(new UserLoginModel
+                        LogInByUserIds= new UserLoginModel
                         {
                             UserId = Convert.ToInt32(dr["UserId"].ToString()),
                             UserRoleId = Convert.ToInt32(dr["UserRoleId"].ToString()),
@@ -2111,8 +2111,7 @@ public class UserLoginModel
                             EmailId = dr["EmailId"].ToString(),
                             PhoneNo = dr["PhoneNo"].ToString(),
                             BirthDate = dr["BirthDate"].ToString()
-                        }
-                        );
+                        };
 
                     }
                 }

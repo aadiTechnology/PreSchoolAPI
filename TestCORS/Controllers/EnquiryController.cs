@@ -359,7 +359,7 @@ namespace TestCORS.Controllers
 
         [HttpPost]
         [Route("GetLogInByUserId")]
-        public List<UserLoginModel> GetLogInByUserId([FromBody] UserLoginModel loginmodel)
+        public UserLoginModel GetLogInByUserId([FromBody] UserLoginModel loginmodel)
         {
             return loginmodel.GetLogInByUserId();
         }
