@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using PreSchoolAPI.Models;
+
 using static UserLoginModel;
 
 namespace TestCORS.Controllers
@@ -363,6 +364,81 @@ namespace TestCORS.Controllers
         {
             return loginmodel.GetLogInByUserId();
         }
+
+
+        [HttpPost]
+        [Route("AddSchoolNotice")]
+        public string AddSchoolNotice([FromBody] SchoolNoticeModel schoolNotice)
+        {
+            return schoolNotice.AddSchoolNotice();
+        }
+
+        [HttpPost]
+        [Route("SendNotice")]
+        public string SendNotice([FromBody] SchoolNoticeModel schoolNotice)
+        {
+            return schoolNotice.SendNotice();
+        }
+
+        [HttpPost]
+        [Route("GetSchoolNoticeList")]
+        public List<SchoolNoticeModel> GetSchoolNoticeList([FromBody] SchoolNoticeModel schoolNotice)
+        {
+            return schoolNotice.GetSchoolNoticeList();
+        }
+
+
+        [HttpPost]
+        [Route("SchoolNoticeListForEdit")]
+        public SchoolNoticeModel SchoolNoticeListForEdit([FromBody] SchoolNoticeModel schoolNotice)
+        {
+            return schoolNotice.SchoolNoticeListForEdit();
+        }
+
+        [HttpPost]
+        [Route("DeleteSchoolNotice")]
+        public string DeleteSchoolNotice([FromBody] SchoolNoticeModel schoolNotice)
+        {
+            return schoolNotice.DeleteSchoolNotice();
+        }
+
+        [HttpPost]
+        [Route("GetViewSchoolNoticeList")]
+        public List<SchoolNoticeModel> GetViewSchoolNoticeList([FromBody] SchoolNoticeModel schoolnotice)
+        {
+
+            return schoolnotice.GetViewSchoolNoticeList();
+        }
+
+        [HttpPost]
+        [Route("GetSchoolNotice")]
+        public List<SchoolNoticeModel> GetSchoolNotice([FromBody] SchoolNoticeModel schoolnotice)
+        {
+            return schoolnotice.GetSchoolNotice();
+        }
+
+        [HttpPost]
+        [Route("GetDatewiseSchoolNotice")]
+        public SchoolNoticeModel GetDatewiseSchoolNotice([FromBody] SchoolNoticeModel schoolnotice)
+        {
+            return schoolnotice.GetDatewiseSchoolNotice();
+        }
+        [HttpPost]
+        [Route("GetDateForLegendNotice")]
+        public List<SchoolNoticeModel> GetDateForLegendNotice([FromBody] SchoolNoticeModel schoolnotice)
+        {
+            return schoolnotice.GetDateForLegendNotice();
+        }
+
+        // GET: TasksList
+        [HttpPost]
+        [Route("GetTasksList")]
+        public List<TasksModel> GetTasksList()
+        {
+            TasksModel taskModel = new TasksModel();
+            return taskModel.GetTasksList();
+        }
+
     }
 
 }

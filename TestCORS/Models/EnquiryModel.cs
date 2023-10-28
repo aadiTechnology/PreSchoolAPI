@@ -2171,3 +2171,485 @@ public class UserLoginModel
         }
     }
 }
+
+public class SchoolNoticeModel
+{
+    public int Id { get; set; }
+    public int ClassDivisionId { get; set; }
+    public int ClassId { get; set; }
+    public int SubjectId { get; set; }
+    public string NoticeDescription { get; set; }
+    public string AssignDate { get; set; }
+    public string BinaryData { get; set; }
+    public string Attachment { get; set; }
+    public string AttachmentName { get; set; }
+    public int UserId { get; set; }
+    public int UserRoleId { get; set; }
+
+    public string ClassName { get; set; }
+    public string DivisionName { get; set; }
+    public string NoticeName { get; set; }
+    public bool IsSubmited { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
+
+    public List<string> NoticeDate { get; set; }
+    public bool AllowPrevious { get; set; }
+    public bool AllowNext { get; set; }
+
+    public string AddSchoolNotice()
+
+    {
+        if (!string.IsNullOrEmpty(AttachmentName))
+        {
+            if (!string.IsNullOrEmpty(BinaryData))
+            {
+                string sFileName = Attachment.Insert(AttachmentName.LastIndexOf("."), DateTime.Now.ToString("$yyyyMMddHHmmss")).Replace(" ", "_");
+                string sFilePath = ConfigurationManager.AppSettings["DoccumentPath"];
+                byte[] FileData = System.Convert.FromBase64String(BinaryData);
+                FileStream fileStream = File.Create((sFilePath + sFileName), (int)FileData.Length);
+                fileStream.Write(FileData, 0, FileData.Length);
+                fileStream.Close();
+                Attachment = sFileName;
+            }
+        }
+        string addSchoolNoticeReturn = "";
+        string connetionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connetionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_AddSchoolNotice";
+
+
+                oCommand.Parameters.Add(new SqlParameter("@Id", SqlDbType.Int))
+                    .Value = Id;
+                oCommand.Parameters.Add(new SqlParameter("@ClassId", SqlDbType.Int))
+                    .Value = ClassId;
+                oCommand.Parameters.Add(new SqlParameter("@NoticeName", SqlDbType.VarChar))
+                  .Value = NoticeName;
+                oCommand.Parameters.Add(new SqlParameter("@NoticeDescription", SqlDbType.VarChar))
+                    .Value = NoticeDescription;
+                oCommand.Parameters.Add(new SqlParameter("@AssignDate", SqlDbType.VarChar))
+                   .Value = AssignDate;
+                /* oCommand.Parameters.Add(new SqlParameter("@AcademicId", SqlDbType.Int))
+                    .Value = AcademicId;*/
+                oCommand.Parameters.Add(new SqlParameter("@Attachment", SqlDbType.VarChar))
+                   .Value = Attachment;
+                oCommand.Parameters.Add(new SqlParameter("@AttachmentName", SqlDbType.VarChar))
+                   .Value = AttachmentName;
+                oCommand.Parameters.Add(new SqlParameter("@UserId", SqlDbType.Int))
+                       .Value = UserId;
+
+
+                try
+                {
+                    oCommand.ExecuteNonQuery();
+                    addSchoolNoticeReturn = "Notice Added Successfully";
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    addSchoolNoticeReturn = "Faild to Add Notice";
+                }
+
+            }
+        }
+        return addSchoolNoticeReturn;
+    }
+    public string SendNotice()
+    {
+        string SendNoticeReturn = "";
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            try
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_SendNotice";
+
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                    param.Value = Id;
+                    int result = oCommand.ExecuteNonQuery();
+                    if (result >= 1)
+                    {
+                        SendNoticeReturn = "Notice Submited Successfully";
+                    }
+                    else
+                    {
+                        SendNoticeReturn = "Faild to Send Notice";
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                oConnection.Close();
+
+                // Action after the exception is caught  
+            }
+        }
+        return SendNoticeReturn;
+    }
+
+
+    public List<SchoolNoticeModel> GetSchoolNotice()
+
+    {
+        List<SchoolNoticeModel> schoolNoticeModel = new List<SchoolNoticeModel>();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionstring))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetSchoolNotice";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                param.Value = Id;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        schoolNoticeModel.Add(
+                            new SchoolNoticeModel
+                            {
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                                ClassName = dr["ClassName"].ToString(),
+                                NoticeName = dr["NoticeName"].ToString(),
+                                NoticeDescription = dr["NoticeDescription"].ToString(),
+                                AssignDate = dr["AssignDate"].ToString(),
+                                Attachment = dr["Attachment"].ToString()
+                            });
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
+            }
+        }
+        return schoolNoticeModel;
+    }
+
+
+
+    public List<SchoolNoticeModel> GetSchoolNoticeList()
+
+    {
+        List<SchoolNoticeModel> schoolnoticemodel = new List<SchoolNoticeModel>();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionstring))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetSchoolNoticeList";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@ClassId", SqlDbType.Int);
+                param.Value = ClassId;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        schoolnoticemodel.Add(
+                            new SchoolNoticeModel
+                            {
+                                Id = Convert.ToInt32(dr["Id"].ToString()),
+                                ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                                ClassName = dr["ClassName"].ToString(),
+                                NoticeName = dr["NoticeName"].ToString(),
+                                NoticeDescription = dr["NoticeDescription"].ToString(),
+                                AssignDate = dr["AssignDate"].ToString(),
+                                Attachment = dr["Attachment"].ToString(),
+                                IsSubmited = Convert.ToBoolean(dr["IsSubmited"].ToString())
+                            });
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
+            }
+        }
+        return schoolnoticemodel;
+    }
+
+
+
+    public SchoolNoticeModel SchoolNoticeListForEdit()
+    {
+        SchoolNoticeModel GetSchoolNotice = new SchoolNoticeModel();
+
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_SchoolNoticeListForEdit";
+
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@Id", SqlDbType.Int);
+                param.Value = Id;
+
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        GetSchoolNotice = new SchoolNoticeModel
+                        {
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            ClassId = Convert.ToInt32(dr["ClassId"].ToString()),
+                            /*SubjectId = Convert.ToInt32(dr["SubjectId"].ToString()),*/
+                            ClassName = dr["ClassName"].ToString(),
+                            NoticeName = dr["NoticeName"].ToString(),
+                            NoticeDescription = dr["NoticeDescription"].ToString(),
+                            AssignDate = dr["AssignDate"].ToString(),
+                            Attachment = dr["Attachment"].ToString(),
+                            AttachmentName = dr["AttachmentName"].ToString()
+                        };
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                }
+            }
+        }
+        return GetSchoolNotice;
+    }
+
+
+    public string DeleteSchoolNotice()
+    {
+        string DeleteSchoolNoticeReturn = "";
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            try
+            {
+                oConnection.Open();
+                using (SqlCommand oCommand = oConnection.CreateCommand())
+                {
+                    oCommand.CommandType = CommandType.StoredProcedure;
+                    oCommand.CommandText = "USP_DeleteSchoolNotice";
+
+                    SqlParameter param;
+                    param = oCommand.Parameters.Add("@SchoolNoticeId", SqlDbType.Int);
+                    param.Value = Id;
+                    oCommand.ExecuteNonQuery();
+                    DeleteSchoolNoticeReturn = "SchoolNotice Deleted Successfully";
+                }
+            }
+            catch (Exception e)
+            {
+                oConnection.Close();
+                DeleteSchoolNoticeReturn = "Faild to Delete SchoolNotice ";
+                // Action after the exception is caught  
+            }
+        }
+        return DeleteSchoolNoticeReturn;
+    }
+
+    public List<SchoolNoticeModel> GetViewSchoolNoticeList()
+
+    {
+        List<SchoolNoticeModel> viewschoolnoticeModel = new List<SchoolNoticeModel>();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionstring))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetViewSchoolNotice";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@Id", SqlDbType.VarChar);
+                param.Value = Id;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        viewschoolnoticeModel.Add(
+                            new SchoolNoticeModel
+                            {
+                                NoticeDescription = dr["NoticeDescription"].ToString(),
+                                AssignDate = dr["AssignDate"].ToString(),
+                                Attachment = dr["Attachment"].ToString()
+                            });
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
+            }
+        }
+        return viewschoolnoticeModel;
+    }
+
+
+    public SchoolNoticeModel GetDatewiseSchoolNotice()
+
+    {
+        SchoolNoticeModel schoolnoticemodel = new SchoolNoticeModel();
+        schoolnoticemodel.NoticeDate = new List<string>();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionstring))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetDatewiseSchoolNotice";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@ClassId", SqlDbType.Int);
+                param.Value = ClassId;
+                param = oCommand.Parameters.Add("@StartDate", SqlDbType.VarChar);
+                param.Value = StartDate;
+                param = oCommand.Parameters.Add("@EndDate", SqlDbType.VarChar);
+                param.Value = EndDate;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+
+                        schoolnoticemodel.NoticeDate.Add(dr["NoticeDate"].ToString());
+                    }
+                    while (dr.NextResult())
+                    {
+                        while (dr.Read())
+                        {
+                            schoolnoticemodel.AllowPrevious = Convert.ToBoolean(dr["AllowPrevious"].ToString());
+                            schoolnoticemodel.AllowNext = Convert.ToBoolean(dr["AllowNext"].ToString());
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
+            }
+        }
+        return schoolnoticemodel;
+    }
+
+    public List<SchoolNoticeModel> GetDateForLegendNotice()
+
+    {
+        List<SchoolNoticeModel> viewSchoolnoticemodel = new List<SchoolNoticeModel>();
+        string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionstring))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetDateForLegendNotice";
+                SqlParameter param;
+                param = oCommand.Parameters.Add("@ClassId", SqlDbType.Int);
+                param.Value = ClassId;
+                param = oCommand.Parameters.Add("@AssignDate", SqlDbType.VarChar);
+                param.Value = AssignDate;
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+
+                        viewSchoolnoticemodel.Add(new SchoolNoticeModel
+                        {
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            AssignDate = dr["AssignDate"].ToString(),
+                            NoticeName = dr["NoticeName"].ToString(),
+                            Attachment = dr["Attachment"].ToString()
+
+                        });
+                    }
+                }
+
+
+                catch (Exception e)
+                {
+                    oConnection.Close();
+
+                }
+            }
+        }
+        return viewSchoolnoticemodel;
+    }
+
+    
+    }
+public class TasksModel
+{
+    public int Id { get; set; }
+    public string TaskName { get; set; }
+    public Boolean IsReminder { get; set; }
+    public DateTime TaskDate { get; set; }
+
+    public List<TasksModel> GetTasksList()
+    {
+        List<TasksModel> TasksList = new List<TasksModel>();
+
+        string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        using (SqlConnection oConnection = new SqlConnection(connectionString))
+        {
+            oConnection.Open();
+            using (SqlCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandType = CommandType.StoredProcedure;
+                oCommand.CommandText = "USP_GetTasksList";
+
+
+                //oCommand.Parameters.Add(new SqlParameter("@TaskDate", SqlDbType.DateTime))
+                //.Value = TaskDate;
+
+                try
+                {
+                    SqlDataReader dr = oCommand.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        TasksList.Add(
+                        new TasksModel
+                        {
+
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            TaskName = dr["TaskName"].ToString(),
+                            TaskDate = Convert.ToDateTime(dr["TaskDate"].ToString()),
+                            IsReminder = Convert.ToBoolean(dr["IsReminder"].ToString()),
+
+                        }
+                        );
+                    }
+                }
+                catch (Exception e)
+                {
+                    oConnection.Close();
+                    // Action after the exception is caught  
+                }
+            }
+        }
+        return TasksList;
+    }
+}
