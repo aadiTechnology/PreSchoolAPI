@@ -2306,6 +2306,7 @@ public class SchoolNoticeModel
         string connectionstring = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         using (SqlConnection oConnection = new SqlConnection(connectionstring))
         {
+
             oConnection.Open();
             using (SqlCommand oCommand = oConnection.CreateCommand())
             {
